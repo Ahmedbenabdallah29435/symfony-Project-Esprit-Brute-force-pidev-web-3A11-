@@ -9,29 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/evenement", name="app_evenement")
+     * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
-        return $this->render('evenement/index.html.twig', [
-            'controller_name' => 'EvenementController',
+        return $this->render('admin/index.html.twig', [
+            'controller_name' => 'AdminController',
         ]);
-    }
-
-   /**
-     * @Route("/home", name="display_front")
-     */
-    public function indexF(): Response
-    {
-        return $this->render('Front/index.html.twig'    
-        );
-    }
-    /**
-     * @Route("/back", name="display_back")
-     */
-    public function indexB(): Response
-    {
-        return $this->render('Back/index.html.twig'    
-        );
     }
 }
