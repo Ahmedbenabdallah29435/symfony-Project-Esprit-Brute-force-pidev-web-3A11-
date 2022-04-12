@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Joueur index{% endblock %}
+
+{% block body %}
+    <h1>Joueur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nomjoueur</th>
+                <th>Prenomjoueur</th>
+                <th>Datedenaissance</th>
+                <th>Age</th>
+                <th>Sexe</th>
+                <th>Ville</th>
+                <th>Imgjoueur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for joueur in joueurs %}
+            <tr>
+                <td>{{ joueur.nomjoueur }}</td>
+                <td>{{ joueur.prenomjoueur }}</td>
+                <td>{{ joueur.datedenaissance ? joueur.datedenaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ joueur.age }}</td>
+                <td>{{ joueur.sexe }}</td>
+                <td>{{ joueur.ville }}</td>
+                {% if joueur.imgjoueur != null %}
+                    <td><img src="{{ asset('uploads/images/' ~ joueur.imgjoueur) }}" alt="" style="width: 50px;height: 50px"> </td>
+                {% endif %}
+                {% if joueur.imgjoueur == null %}
+                    <td>No.Image</td>
+                {% endif %}
+                <td>
+                    <a href="{{ path('app_joueur_show', {'idjoueur': joueur.idjoueur}) }}">show</a>
+                    <a href="{{ path('app_joueur_edit', {'idjoueur': joueur.idjoueur}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_joueur_new') }}">Create new</a>
+{% endblock %}

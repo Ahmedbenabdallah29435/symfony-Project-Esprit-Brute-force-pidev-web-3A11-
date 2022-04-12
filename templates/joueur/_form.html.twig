@@ -1,0 +1,67 @@
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+
+
+<div class="form-group">
+    <a style="color:black">Nom</a>
+    <br>
+    {{ form_widget(form.nomjoueur)}}
+    <div style="color:red">
+        {{ form_errors(form.nomjoueur)}}
+    </div>
+
+    <a style="color:black">Prenom </a>
+    <br>
+    {{ form_widget(form.prenomjoueur)}}
+    <div style="color:red">
+        {{ form_errors(form.prenomjoueur)}}
+    </div>
+
+    <a style="color:black">Date</a>
+    <br>
+    {{ form_widget(form.datedenaissance)}}
+    <div style="color:red">
+        {{ form_errors(form.datedenaissance)}}
+    </div>
+
+    <a style="color:black">age</a>
+    <br>
+    {{ form_widget(form.age)}}
+    <div style="color:red">
+        {{ form_errors(form.age)}}
+    </div>
+
+    <a style="color:black">Sexe</a>
+    <br>
+    {{ form_widget(form.sexe)}}
+    <div style="color:red">
+        {{ form_errors(form.sexe)}}
+    </div>
+
+    <a style="color:black">Ville</a>
+    <br>
+    {{ form_widget(form.ville)}}
+    <div style="color:red">
+        {{ form_errors(form.ville)}}
+    </div>
+
+    <a style="color:black">Categorie</a>
+    <br>
+    {{ form_widget(form.categorie)}}
+    <div style="color:red">
+        {{ form_errors(form.categorie)}}
+    </div>
+    <br>
+    <a style="color:black">image Joueur</a>
+    <br>
+    {{ form_widget(form.imgjoueur)}}
+    <div style="color:red">
+        {{ form_errors(form.imgjoueur)}}
+    </div>
+
+
+    <br>
+
+</div>
+<button class="btn btn-success" >{{ button_label|default('Add Joueur') }}</button>
+
+{{ form_end(form) }}

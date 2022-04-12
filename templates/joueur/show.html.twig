@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Joueur{% endblock %}
+
+{% block body %}
+    <h1>Joueur</h1>
+
+    <table class="table">
+        <tbody>
+
+            <tr>
+                <th>Nomjoueur</th>
+                <td>{{ joueur.nomjoueur }}</td>
+            </tr>
+            <tr>
+                <th>Prenomjoueur</th>
+                <td>{{ joueur.prenomjoueur }}</td>
+            </tr>
+            <tr>
+                <th>Datedenaissance</th>
+                <td>{{ joueur.datedenaissance ? joueur.datedenaissance|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Age</th>
+                <td>{{ joueur.age }}</td>
+            </tr>
+            <tr>
+                <th>Sexe</th>
+                <td>{{ joueur.sexe }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ joueur.ville }}</td>
+            </tr>
+            <tr>
+                <th>Imgjoueur</th>
+                {% if joueur.imgjoueur != null %}
+                    <td><img src="{{ asset('uploads/images/' ~ joueur.imgjoueur) }}" alt="" style="width: 50px;height: 50px"> </td>
+                {% endif %}
+                {% if joueur.imgjoueur == null %}
+                    <td>No.Image</td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_joueur_new') }}">back to list</a>
+
+    <a href="{{ path('app_joueur_edit', {'idjoueur': joueur.idjoueur}) }}">edit</a>
+
+    {{ include('joueur/_delete_form.html.twig') }}
+{% endblock %}
