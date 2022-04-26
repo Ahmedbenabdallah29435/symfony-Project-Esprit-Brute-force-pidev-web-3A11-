@@ -26,6 +26,32 @@ class JoueurRepository extends ServiceEntityRepository
     }
 
 
+    public function SearchAndTriJoueur($ValueTyped,$order){
+        $em = $this->getEntityManager();
+        if($order=='DESC') {
+            $query = $em->createQuery(
+                'SELECT r FROM App\Entity\Joueur r   where r.nomjoueur like :ValueTyped  or r.prenomjoueur like :ValueTyped or r.datedenaissance like :ValueTyped or r.age like :ValueTyped or r.sexe like :ValueTyped or r.ville like :ValueTyped order by r.idjoueur DESC '
+            );
+            $query->setParameter('ValueTyped', $ValueTyped . '%');
+        }
+        else{
+            $query = $em->createQuery(
+                'SELECT r FROM App\Entity\Joueur r   where r.nomjoueur like :ValueTyped  or r.prenomjoueur like :ValueTyped or r.datedenaissance like :ValueTyped or r.age like :ValueTyped or r.sexe like :ValueTyped or r.ville like :ValueTyped order by r.idjoueur ASC '
+            );
+            $query->setParameter('ValueTyped', $ValueTyped . '%');
+        }
+        return $query->getResult();
+    }
 
+    public function find_bySexe($Sexe){
+
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT DISTINCT  count(r.idjoueur) FROM   App\Entity\Joueur r  where r.sexe = :sexe   '
+        );
+        $query->setParameter('sexe', $Sexe);
+        return $query->getResult();
+    }
 
 }

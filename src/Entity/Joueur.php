@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups ;
 
 /**
  * Joueur
@@ -19,6 +20,8 @@ class Joueur
      * @ORM\Column(name="idJoueur", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $idjoueur;
 
@@ -27,6 +30,8 @@ class Joueur
      *
      * @ORM\Column(name="NomJoueur", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Nom Joueur est Vide !")
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $nomjoueur;
 
@@ -35,6 +40,8 @@ class Joueur
      *
      * @ORM\Column(name="PrenomJoueur", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Prenom Joueur est Vide !")
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $prenomjoueur;
 
@@ -42,6 +49,8 @@ class Joueur
      * @var \DateTime
      *
      * @ORM\Column(name="DateDeNaissance", type="date", nullable=false)
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $datedenaissance;
 
@@ -50,6 +59,8 @@ class Joueur
      *
      * @ORM\Column(name="Age", type="integer", nullable=false)
      * @Assert\NotBlank(message="Age Joueur est Vide !")
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $age;
 
@@ -57,6 +68,8 @@ class Joueur
      * @var string
      *
      * @ORM\Column(name="Sexe", type="string", length=255, nullable=false)
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $sexe;
 
@@ -65,6 +78,8 @@ class Joueur
      *
      * @ORM\Column(name="Ville", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Ville Joueur est Vide !")
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $ville;
 
@@ -72,6 +87,8 @@ class Joueur
      * @var string
      *
      * @ORM\Column(name="imgJoueur", type="string", length=255, nullable=false)
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $imgjoueur;
 
@@ -82,6 +99,8 @@ class Joueur
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="Categorie", referencedColumnName="idCategorie")
      * })
+     *@Groups("joueur")
+     * @Groups("posts:read")
      */
     private $categorie;
 

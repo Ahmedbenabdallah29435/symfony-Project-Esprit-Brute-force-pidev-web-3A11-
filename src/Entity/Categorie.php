@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups ;
 
 /**
  * Categorie
@@ -19,6 +20,8 @@ class Categorie
      * @ORM\Column(name="idCategorie", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *@Groups("categorie")
+     * @Groups("posts:read")
      */
     private $idcategorie;
 
@@ -33,6 +36,8 @@ class Categorie
      *      minMessage = "must be at least {{ limit }} characters long",
      *      maxMessage = "cannot be longer than {{ limit }} characters"
      * )
+     *@Groups("categorie")
+     * @Groups("posts:read")
      */
     private $nomcategorie;
 
@@ -47,6 +52,8 @@ class Categorie
      *      minMessage = "must be at least {{ limit }} characters long",
      *      maxMessage = "cannot be longer than {{ limit }} characters"
      * )
+     *@Groups("categorie")
+     * @Groups("posts:read")
      */
     private $genre;
 

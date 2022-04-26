@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Form\CategorieType;
+use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route("/categorie")
@@ -93,4 +97,63 @@ class CategorieController extends AbstractController
 
         return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    /**
+     *@Route("/pdf/categ",name="pdf_index", methods={"GET"})
+     */
+    public function pdfCateg(CategorieRepository $categorieRepository)
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('categorie/pdf.html.twig', [
+            'categories' =>$categorieRepository->findAll(),
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A2', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => false
+        ]);
+    }
+
+
+    /**
+     * @Route("/r/search_rec", name="search_categorie", methods={"GET"})
+     */
+    public function search_rec(Request $request,NormalizerInterface $Normalizer,CategorieRepository $CategorieRepository ): Response
+    {
+
+        $requestString=$request->get('searchValue');
+        $requestString3=$request->get('orderid');
+
+        //   dump($requestString);
+        //  dump($requestString2);
+        $Categorie = $CategorieRepository->SearchAndTriCategorie($requestString,$requestString3);
+        //   dump($reclamations);
+        $jsoncontentc =$Normalizer->normalize($Categorie,'json',['groups'=>'posts:read']);
+        //  dump($jsoncontentc);
+        $jsonc=json_encode($jsoncontentc);
+        //   dump($jsonc);
+        if(  $jsonc == "[]" )
+        {
+            return new Response(null);
+        }
+        else{        return new Response($jsonc);
+        }
+
+    }
+
 }
