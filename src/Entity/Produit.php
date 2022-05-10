@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProduitRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,35 +18,44 @@ class Produit
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("produit:read")
+     * @Groups("commande:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank(message="prix is required")
+     * @Groups("produit:read")
      */
     private $prixProduit;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="quantite is required")
+     * @Groups("produit:read")
      */
     private $quantiteProduit;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="description is required")
+     * @Groups("produit:read")
      */
     private $descProduit;
 
     /**
      * @ORM\Column(type="string", length=255 )
+     * @Groups("produit:read")
+     * @Groups("commande:read")
      */
     private $image;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Nom Produit is required")
+     * @Groups("produit:read")
+     * @Groups("commande:read")
      */
     private $nomProduit;
 

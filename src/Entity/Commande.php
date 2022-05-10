@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CommandeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -18,30 +19,35 @@ class Commande
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("commande:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("commande:read")
      */
     private $nomClient;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank 
+     * @Groups("commande:read")
      */
     private $prenomClient;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("commande:read")
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank 
+     * @Groups("commande:read")
      */
     private $postcode;
 
@@ -52,12 +58,14 @@ class Commande
      *      min = 8,
      *      max = 8,
      * )
+     * @Groups("commande:read")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank 
+     * @Groups("commande:read")
      */
     private $montant;
 
@@ -66,12 +74,14 @@ class Commande
      * @Assert\NotBlank 
      * @Assert\Date
      * @var string A "Y-m-d" formatted value 
+     * @Groups("commande:read")
      */
     private $dateCommande;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank 
+     * @Groups("commande:read")
      */
     private $etatCommande;
 
@@ -83,6 +93,7 @@ class Commande
 
     /**
      * @ORM\OneToMany(targetEntity=LigneCommande::class, mappedBy="commande",orphanRemoval=true)
+     * @Groups("commande:read")
      */
     private $ligneCommandes;
 
@@ -235,6 +246,7 @@ class Commande
     {
         return $this->ligneCommandes;
     }
+    
 
     public function addLigneCommande(LigneCommande $ligneCommande): self
     {

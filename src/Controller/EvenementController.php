@@ -10,6 +10,7 @@ use App\Entity\Evenement;
 use App\Entity\Commentaires;
 use App\Form\CommentairesType;
 use App\Form\EvenementFormType;
+use Snipe\BanBuilder\CensorWords;
 use App\Repository\NoteRepository;
 use App\Services\cart\CartService;
 use App\Repository\DemandesRepository;
@@ -18,20 +19,20 @@ use App\Repository\CommentairesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Snipe\BanBuilder\CensorWords;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+
 
 
 
 class EvenementController extends AbstractController
 {
-   
-/**
+
+    /**
      * @Route("/", name="display_front")
      */
     public function index(): Response
@@ -41,9 +42,7 @@ class EvenementController extends AbstractController
         ]);
     }
 
-
-
-
+   
   /**
      * @Route("admin/evenement/aff", name="ev_aff")
      */
@@ -219,8 +218,7 @@ class EvenementController extends AbstractController
           ]);
     
     }
-
-      /**
+    /**
  * @Route("/evenementJSON", name="evenementJSON", methods={"GET"})
  */
 public function afficherJSON(EvenementRepository $rep, SerializerInterface $serializer): Response
@@ -244,8 +242,15 @@ public function getEventJSON(EvenementRepository $rep, Request $request,Serializ
     $json = $serializer->serialize($result, 'json', ['groups' => 'evenement:read']);
     return new JsonResponse($json, 200, [], true);
 }
-
      
    
 }
+
+
+
+
+
+
+
+
 

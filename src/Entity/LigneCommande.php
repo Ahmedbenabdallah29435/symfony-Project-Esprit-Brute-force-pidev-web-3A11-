@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\LigneCommandeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LigneCommandeRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=LigneCommandeRepository::class)
@@ -14,16 +15,19 @@ class LigneCommande
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("commande:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("commande:read")
      */
     private $quantite;
 
     /**
      * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="ligneCommandes")
+     * @Groups("commande:read")
      */
     private $produit;
 
@@ -37,18 +41,6 @@ class LigneCommande
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdProduit(): ?string
-    {
-        return $this->idProduit;
-    }
-
-    public function setIdProduit(string $idProduit): self
-    {
-        $this->idProduit = $idProduit;
-
-        return $this;
     }
 
     public function getQuantite(): ?int

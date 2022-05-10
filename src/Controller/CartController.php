@@ -8,8 +8,10 @@ use App\Repository\ProduitRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
  /**
      * @Route("/cart", name="cart_")
@@ -59,11 +61,13 @@ class CartController extends AbstractController
     {
 
      $panier = $cartService->add($id);
+  
 
     return new  Response(json_encode($panier));
 
 
     }
+
 
 
     /**
@@ -121,5 +125,59 @@ class CartController extends AbstractController
     return $this->redirecttoRoute("cart_index");
     }
 
+#################### Mobile ##################
+    /**
+     * @Route("/addjson", name="add")
+     */
+    public function addjson(Request $request, Produitrepository $rep , SerializerInterface $serializer)
+    {
+
+    $id = $request->get("id");
+    
+
+    // On récupère le panier actuel
+    $find= $rep->find($id);
+
+
+
+    
+    $json = $serializer->serialize($find, 'json', ['groups' => 'produit:read']);
+        return new JsonResponse($json, 200, [], true);
+
+
+    }
+
+    /**
+     * @Route("/affcartjson", name="index_json")
+     */
+    public function indexjson(SessionInterface $session, ProduitRepository $produitrep): Response
+    {
+        $panier = $session->get("panier",[]);
+        
+        // on fabrique les données 
+
+        $dataPanier = []; 
+        $total = 0; 
+
+        foreach ($panier as $id => $quantite){
+            $produit = $produitrep->find($id);
+            $dataPanier[] = [
+                "id" => $produit->getId(),
+                "nom" => $produit->getNomProduit(),
+                "prix" => $produit->getPrixProduit(),
+                "image" => $produit->getImage(),
+                "quantite" => $quantite  
+            ];
+        }
+      
+         
+        return new  Response(json_encode($dataPanier));
+
+      
+    }
+
+
+
 
 }
+

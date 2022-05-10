@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ReclamationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReclamationRepository;
 use phpDocumentor\Reflection\Types\Null_;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,6 +17,7 @@ class Reclamation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("Reclamation:read")
      */
     private $id;
 
@@ -23,6 +25,7 @@ class Reclamation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=2, max=100)
+     * @Groups("Reclamation:read")
      */
     private $name;
 
@@ -30,6 +33,7 @@ class Reclamation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @Groups("Reclamation:read")
      */
     private $email;
 
@@ -37,6 +41,7 @@ class Reclamation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max=100)
+     * @Groups("Reclamation:read")
      */
     private $subject;
 
@@ -44,13 +49,15 @@ class Reclamation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(min=10)
+     * @Groups("Reclamation:read")
      */
     private $message;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * * @Assert\Choice({"Hardware", "Software", "Reparation"})
+     * @Assert\Choice({"Hardware", "Software", "Reparation"})
+     * @Groups("Reclamation:read")
      */
     private $type;
 
@@ -61,6 +68,7 @@ class Reclamation
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Choice({"En cours", "Résolue"})
+     * @Groups("Reclamation:read")
      */
     private $etat;
 
@@ -76,7 +84,7 @@ class Reclamation
     private $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="reclamations" )
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="reclamations")
      */
     private $commande;
 

@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\EvenementRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-
+use App\Repository\EvenementRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
@@ -22,6 +20,7 @@ class Evenement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("evenement:read")
      */
     private $id;
 
@@ -37,7 +36,6 @@ class Evenement
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Assert\NotBlank(message="prix is required")
-     * @Groups("evenement:read")
 
      */
     private $prix;
@@ -45,6 +43,7 @@ class Evenement
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="adresse is required")
+     * @Groups("evenement:read")
 
      */
     private $adresse;
@@ -56,7 +55,6 @@ class Evenement
      * @Assert\NotBlank(message="date is required")
      * @var string A "Y-m-d H:i:s" formatted value
      * @Assert\GreaterThanOrEqual("today")
-     * @Groups("evenement:read")
 
      */
     private $date;
@@ -75,6 +73,7 @@ class Evenement
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="description is required")
      * @Groups("evenement:read")
+
      */
     private $description;
 
@@ -86,32 +85,19 @@ class Evenement
 
     /**
      * @ORM\OneToMany(targetEntity=Commentaires::class, mappedBy="annonces", orphanRemoval=true)
-     * @Groups("evenement:read")
      */
     private $commentaires;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("evenement:read")
      */
     private $longdesc;
 
     /**
      * @ORM\OneToMany(targetEntity=Note::class, mappedBy="evenement")
-     * @Groups("evenement:read")
      */
     private $notes;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $latitude;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $longitude;
-    
-    
 
     public function __construct()
     {
@@ -280,30 +266,6 @@ class Evenement
                 $note->setEvenement(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(string $latitude): self
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(string $longitude): self
-    {
-        $this->longitude = $longitude;
 
         return $this;
     }

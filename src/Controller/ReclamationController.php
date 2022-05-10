@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\Reponse;
 use App\Entity\Reclamation;
+use App\Entity\Utilisateurs;
+use Doctrine\ORM\Mapping\Id;
 use App\Form\ReclamationType;
 use App\Services\cart\CartService;
 use App\Repository\ReponseRepository;
@@ -12,13 +14,17 @@ use App\Repository\CommandeRepository;
 use App\Repository\ReclamationRepository;
 use App\Repository\UtilisateursRepository;
 use App\Repository\LigneCommandeRepository;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Snipe\BanBuilder\CensorWords;
+use Symfony\Component\Serializer\Serializer;
 
 class ReclamationController extends AbstractController
 {
@@ -54,14 +60,7 @@ class ReclamationController extends AbstractController
         $form->add('Ajouter', SubmitType::class);
         $form->handleRequest($req);
         if($form->isSubmitted() && $form->isValid())
-        {   $messageContent =$form->get('message')->getData();
-            $censor = new CensorWords;
-    
-
-            $string = $censor->censorString($messageContent);
-            $reclamations->setMessage($string['clean']);
-            
-            $em=$this->getDoctrine()->getManager();
+        {$em=$this->getDoctrine()->getManager();
             $user=$rep->find($id);
             $reclamations->setClient($user);
             
@@ -92,22 +91,14 @@ class ReclamationController extends AbstractController
      * @return Response
      * @Route("reclamation/list/{value}", name="r_list")
      */
-    public function afficher($value, ReclamationRepository $rep,CartService $cartService,LigneCommandeRepository $ligneCommande, Request $request, PaginatorInterface $paginator): Response
+    public function afficher($value, ReclamationRepository $rep,CartService $cartService,LigneCommandeRepository $ligneCommande): Response
     {    $dataPanier = $cartService->getFullCart();  
         $total = $cartService->getTotal();
 
         $reclamations=$rep->findById($value);
-        $donnees = $paginator->paginate(
-            $reclamations,
-            $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            2 // Nombre de résultats par page
-        );
-
-
-
         $ligneCommande = $ligneCommande->findall();
         return $this->render('reclamation/listReclamation.html.twig', [
-            'tab' => $donnees,
+            'tab' => $reclamations,
             'elements' => $dataPanier,
             'tab1' => $ligneCommande,
             'total' => $total
@@ -133,33 +124,6 @@ class ReclamationController extends AbstractController
         ]);
     }
 
-      /** 
-     * @Route("reclamation/true", name="etat_true")
-     */
-    public function affichetrue(CartService $cartService): Response
-    {
-        $dataPanier = $cartService->getFullCart();  
-        $total = $cartService->getTotal();
-        
-        return $this->render('reclamation/true.html.twig', [
-            'elements' => $dataPanier,
-            'total' => $total
-        ]);
-    }
-      /** 
-     * @Route("reclamation/error", name="etat_error")
-     */
-    public function afficheErreur(CartService $cartService): Response
-    {
-        $dataPanier = $cartService->getFullCart();  
-        $total = $cartService->getTotal();
-        
-        return $this->render('reclamation/error.html.twig', [
-            'elements' => $dataPanier,
-            'total' => $total
-        ]);
-    }
-
      /**
      * @Route("/reclamation/searchajax", name="ajaxsearchRec",methods={"GET"})
      */
@@ -176,10 +140,119 @@ class ReclamationController extends AbstractController
     }
 
 
-    
+    // /**
+    // * @Route("/AfficheReclamationjson/",name="AfficheReclamationjson")
+    // */
+    // public function allRecAction()
+    // {
+
+    //     $reclamation = $this->getDoctrine()->getManager()->getRepository(Reclamation::class)->findAll();
+    //     $serializer = new Serializer([new ObjectNormalizer()]);
+    //     $formatted = $serializer->normalize($reclamation);
+
+    //     return new JsonResponse($formatted);
+
+    // }
 
 
-    
+    /**
+    * @Route("/addreclamationJSON/",name="addreclamationJSON")
+    */
+
+    public function addReclamationJSON(Request $request,NormalizerInterface $Normalizer,CommandeRepository $cc ,ReclamationRepository $rep, UtilisateursRepository $rep1,SerializerInterface $serializer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $reclamation = new Reclamation();
+        $reclamation->setName($request->get('name'));
+        $reclamation->setSubject($request->get('subject'));
+        $reclamation->setMessage($request->get('message'));
+        $reclamation->setType($request->get('type'));
+        $reclamation->setEtat("En cours");
+        $reclamation->setEmail($request->get('email'));
+
+        $id_client = $request->get('idclient');
+        $idc = $rep1->find($id_client);
+        $reclamation->setClient($idc);
+
+        $idrec= $request->get('idrec');
+        $idreclamation = $cc->find($idrec);
+        $reclamation->setCommande($idreclamation);
+        
+        /*$Iduser = $rep1->getId();
+        $cl = new Utilisateurs();
+        //$cl = $rep1->find($Iduser);
+        $cl = $rep1 ->findBy(array('client' => $Iduser));
+
+        $reclamation->setClient($cl);*/
+       
+
+
+
+        $em->persist($reclamation);
+        $em->flush();
+      
+
+        $json = $serializer->serialize($reclamation, 'json', ['groups' => ['normal']]);
+        return new JsonResponse($json, 200, [], true);
+
+    }
+
+    /**
+     * @Route("/deleteReclamation", name="delete_reclamation")
+     */
+
+    public function deleteReclamationAction(Request $request) {
+        $id = $request->get("id");
+
+        $em = $this->getDoctrine()->getManager();
+        $reclamation = $em->getRepository(Reclamation::class)->find($id);
+        if($reclamation!=null ) {
+            $em->remove($reclamation);
+            $em->flush();
+
+            $serialize = new Serializer([new ObjectNormalizer()]);
+            $formatted = $serialize->normalize("Reclamation a ete supprimee avec success.");
+            return new JsonResponse($formatted);
+
+        }
+        return new JsonResponse("id reclamation invalide.");
+
+
+    }
+
+    /**
+     * @Route("/updateReclamation", name="update_reclamation")
+     * @Method("PUT")
+     */
+    public function modifierReclamationAction(Request $request,SerializerInterface $serializer) {
+        $em = $this->getDoctrine()->getManager();
+        $reclamation = $this->getDoctrine()->getManager()
+            ->getRepository(Reclamation::class)
+            ->find($request->get("id"));
+
+
+        $reclamation->setName($request->get('name'));
+        $reclamation->setSubject($request->get('subject'));
+        $reclamation->setMessage($request->get('message'));
+        $reclamation->setType($request->get('type'));
+        $reclamation->setEtat("En cours");
+        $reclamation->setEmail($request->get('email'));
+
+        $em->persist($reclamation);
+        $em->flush();
+
+        $json = $serializer->serialize($reclamation, 'json', ['groups' => ['normal']]);
+        return new JsonResponse($json, 200, [], true);
+
+        
+
+    }
+
+
+
+
+
+
 
 
 

@@ -13,6 +13,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -147,6 +149,20 @@ class ProduitController extends AbstractController
 
         return $this->redirectToRoute('produit_list');
     }
+
+
+#***************************MOBILE*******************************#
+    
+    /**
+     * @Route("/afficherproduitjson", name="afifcher_json", methods={"GET"})
+     */
+    public function afficherJSON(ProduitRepository $rep, SerializerInterface $serializer): Response
+    {
+        $result = $rep->findAll();
+        $json = $serializer->serialize($result, 'json', ['groups' => 'produit:read']);
+        return new JsonResponse($json, 200, [], true);
+    }
+
 
   
     

@@ -8,10 +8,16 @@ use App\Form\UtilisateursType;
 use App\Form\EditUtilisateursType;
 use App\Services\cart\CartService;
 use App\Repository\UtilisateursRepository;
+use Exception;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -223,6 +229,92 @@ class UtilisateursController extends AbstractController
      * @Route("/logout", name="logout")
      */
     public function logout(){}
+
+    #***************************MOBILE*******************************#
+
+    /**
+     * @Route("/utilisateursjson", name="json_index", methods={"GET"})
+     */
+    public function afficherJSON(UtilisateursRepository $UtilisateursRepository, SerializerInterface $serializer): Response
+    {
+        $result = $UtilisateursRepository->findAll();
+        /* $n = $normalizer->normalize($result, null, ['groups' => 'pack:read']);
+        $json = json_encode($n); */
+        $json = $serializer->serialize($result, 'json', ['groups' => 'utilisateurs:read']);
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    /**
+     * @Route("/registerJSON",name="registerJSON")
+     */
+
+    public function registerJSON(Request $request, NormalizerInterface $Normalizer, UserPasswordEncoderInterface $encoder)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $utilisateurs = new Utilisateurs();
+        $utilisateurs->setNom($request->get('Nom'));
+        $utilisateurs->setPrenom($request->get('Prenom'));
+        $utilisateurs->setEmail($request->get('Email'));
+        $utilisateurs->setTelephone($request->get('Telephone'));
+        $utilisateurs->setPassword($request->get('Password'));
+
+        $em->persist($utilisateurs);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($utilisateurs, 'json', ['groups' => 'utilisateurs:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    /**
+     * @Route("/loginJSON", name="loginJSON", methods={"POST"})
+     */
+    public function signin(Request $request ,UtilisateursRepository $rep): Response
+    {
+        $email= $request->query->get('Email');
+        $password = $request->query->get('Password');
+        $user=$rep->findOneBy(['Email'=>$email]);
+        if($user){
+            if((password_verify($password,$user->getPassword())) ||($password==$user->getPassword())) {
+                $serializer= new Serializer([new ObjectNormalizer()]);
+                $formatted=$serializer->normalize($user);
+                return new JsonResponse($formatted);
+
+            }
+            else return new Response("failed");
+        }
+        else return new Response("failed");
+    }
+
+    /**
+     * @Route("/edituserJSON", name="edituserJSON", methods={"POST"})
+     */
+    public function edituser(Request $request, UtilisateursRepository $rep, UserPasswordEncoderInterface $encoder){
+        $id=$request->get("id");
+        $user = $rep->find($id);
+
+        $nom = $request->query->get("Nom");
+        $prenom = $request->query->get("Prenom");
+        $telephone = $request->query->get("Telephone");
+        $email=$request->query->get("Email");
+        $password = $request->get('Password');
+
+    try{
+        $user->setNom($nom);
+        $user->setPrenom($prenom);
+        $user->setTelephone($telephone);
+        $user->setEmail($email);
+        $user->setPassword($password);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+       return new JsonResponse("success",200);
+    }catch(Exception $ex){
+        return new Response("Failed",$ex->getMessage());
+    }
+
+        }
+
+    /**********************************************************/
 
   
 

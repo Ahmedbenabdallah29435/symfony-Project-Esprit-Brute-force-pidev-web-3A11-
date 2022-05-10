@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentairesRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,12 +19,14 @@ class Commentaires
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("commentaires:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
      *  @Assert\NotBlank(message="contenu is required")
+     * @Groups("commentaires:read")
      */
     private $contenu;
 
@@ -64,6 +67,7 @@ class Commentaires
     /**
      * @ORM\Column(type="string", length=30)
      * @Assert\NotBlank(message="Pseudo is required")
+     * @Groups("commentaires:read")
      */
     private $Pseudo;
 
