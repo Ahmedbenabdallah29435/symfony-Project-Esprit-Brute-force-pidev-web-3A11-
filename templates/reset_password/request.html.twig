@@ -1,0 +1,54 @@
+{% extends 'baseCart.html.twig' %}
+
+
+{% block body %}
+                <!-- Begin Mobile Menu Area -->
+                <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+                    <div class="container"> 
+                        <div class="row">
+                            <div class="mobile-menu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mobile Menu Area End Here -->
+            </header>
+            <!-- Header Area End Here -->
+            <!-- Begin Li's Breadcrumb Area -->
+            <div class="breadcrumb-area">
+                <div class="container">
+                    <div class="breadcrumb-content">
+                        <ul>
+                            <li><a href="{{path('home')}}">Home</a></li>
+                            <li class="active">New Event</li>
+                           </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Breadcrumb Area End Here -->
+            <!-- Begin Login Content Area -->
+                            <div class="page-section mb-60">
+                                <div class="container">             
+                                       
+                                            <div class="login-form">
+                                                <h4 class="login-title">new event</h4>
+                                                           
+                                                        {{ form_start(requestForm) }}
+                                                        {{ form_row(requestForm.Email) }}
+                                                        <div>
+                                                            <small>
+                                                                Enter your email address and we will send you a
+                                                                link to acess new event.
+                                                            </small>
+                                                        </div>
+                                           <div class="col-md-12">
+                                            <button class="register-button mt-0">enjoy</button>
+                                            </div>
+                                        {{ form_end(requestForm) }}
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+              
+            <!-- Login Content Area End Here -->
+         {% endblock %}

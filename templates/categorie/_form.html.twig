@@ -1,0 +1,24 @@
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+
+
+<div class="form-group">
+    <a style="color:black">nom categorie</a>
+    <br>
+    {{ form_widget(form.nomcategorie)}}
+    <div style="color:red">
+        {{ form_errors(form.nomcategorie)}}
+    </div>
+
+    <a style="color:black">genre </a>
+    <br>
+    {{ form_widget(form.genre)}}
+    <div style="color:red">
+        {{ form_errors(form.genre)}}
+    </div>
+
+    <br>
+
+</div>
+<button class="btn btn-success" >{{ button_label|default('Add Categorie') }}</button>
+
+{{ form_end(form) }}

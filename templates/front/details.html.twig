@@ -1,0 +1,147 @@
+{% extends "baseCart.html.twig" %}
+{% block title %}<title>ProTECH|Home</title>{% endblock %}
+
+ {% block body %}  
+<!-- content-wraper start -->
+            <div class="content-wraper">
+                <div class="container">
+                    <div class="row single-product-area">
+                        <div class="col-lg-5 col-md-6">
+                           <!-- Product Details Left -->
+                            <div class="product-details-left">
+                                <div class="product-details-images slider-navigation-1">
+                                    <div class="lg-image">
+                                        <a class="popup-img venobox vbox-item"  data-gall="myGallery">
+                                                {% for image in bout.images %}
+                                              <img src="{{ asset('/uploads/' ~ image.name) }}" alt="" width="200">
+                   
+                                                {% endfor %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-details-thumbs slider-thumbs-1">                                        
+                     
+                                    
+                                </div>
+                            </div>
+                            <!--// Product Details Left -->
+                        </div>
+
+                        <div class="col-lg-7 col-md-6">
+                            <div class="product-details-view-content pt-60">
+                                <div class="product-info">
+                                    <h2>{{bout.nomBoutique}}</h2>
+
+                                    <div class="rating-box pt-20">
+                                        <ul class="rating rating-with-review-item">
+                                            <li><i class="fa fa-star-o"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                           >
+                                        </ul>
+                                    </div>
+                                    <div class="price-box pt-20">
+                                        <span class="new-price new-price-2">{{bout.adresseBoutique}}</span>
+                                    </div>
+                                    <div class="product-desc">
+                                        <p>
+                                            <span>{{bout.descBoutique}}</span>
+                                        </p>
+                                    </div>
+
+                                       <div class="product-desc">
+                                        <p>
+                                            <span>Email du Commerçant : {{ bout.Commercant.getEmail()}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="boutique-map">
+
+                                    <td>  <a href="https://www.bing.com/maps?q={{bout.latitude}}+%2C+{{bout.longitude}}&cvid=993001ce00214b6ab9ba468a3866a2f6&aqs=edge.0.69i59j69i60l3.670j0j4&FORM=ANAB01&PC=NMTS">View Larger Map</a></small> 
+                     </td>
+                                    </div>
+                                   
+                                  
+                                    
+                                    
+                                    
+                                </div>
+                            </div>
+                        
+                        </div> 
+                    </div>
+               <!-- Begin Li's Laptop Product Area -->
+            <section class="product-area li-laptop-product pt-60 pb-45 pt-sm-50 pt-xs-60">
+                <div class="container">
+                    <div class="row">
+                        <!-- Begin Li's Section Area -->
+                        <div class="col-lg-12">
+                            <div class="li-section-title">
+                                <h2>
+                                    <span>Liste des Produits</span>
+                                </h2>
+                                <ul class="li-sub-category-list">
+                                    <li class="active"><a href="shop-left-sidebar.html">Prime Video</a></li>
+                                    <li><a href="shop-left-sidebar.html">Computers</a></li>
+                                    <li><a href="shop-left-sidebar.html">Electronics</a></li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <div class="product-active owl-carousel">
+                                {% for prod in prod %}
+                                    <div class="col-lg-12">
+                                        <!-- single-product-wrap start -->
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                <a href="{{path('detail',{id : prod.id })}}">
+                                                    <img src="{{asset('uploads/') ~ prod.image }}" alt="product image">
+                                                </a>
+                                                <span class="sticker">New</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="{{path('detail',{id : prod.id })}}">Graphic Corner</a>
+                                                        </h5>
+                                                        <div class="rating-box">
+                                                            <ul class="rating">
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <h4><a class="product_name" href="{{path('detail',{id : prod.id })}}">{{ prod.nomProduit }}</a></h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price">{{prod.prixProduit}} DT</span>
+                                                    </div>
+                                                </div>
+                                                <div class="add-actions">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart active"><a href="{{path('cart_add',{id : prod.id })}}">Add to cart</a></li>
+                                                        <li><a class="links-details" href="{{path('detail',{id : prod.id })}}"><i class="fa fa-heart-o"></i></a></li>
+                                                        <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single-product-wrap end -->
+                                    </div>
+                               {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Li's Section Area End Here -->
+                    </div>
+                </div>
+            </section>
+            <!-- Li's Laptop Product Area End Here -->
+            
+               </div>
+            </div>
+            <!-- content-wraper end -->
+ {% endblock %}

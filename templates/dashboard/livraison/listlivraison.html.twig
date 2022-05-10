@@ -1,0 +1,412 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>DataTables</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Livraison</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                   
+                    <th>etat Livraison</th>
+                    <th>date Livraison</th>
+                  <th>adresse Commande</th>
+                     <th>Prix Livraison</th>
+                      <th>Livreur</th>
+                      <th>Vehicule</th>
+                    
+                      <th>Map</th>
+                        <th>Message </th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                      {% for class in tab %}
+                  <tr>
+       
+                  {% if class.etatLivraison == 1 %}
+                    <td>Livrée </td>
+                    {% else %}
+                    <td>Non Livrée </td>
+                    {% endif %}
+               <td>{{class.dateLivraison|date('Y-m-d ')}}</td>
+                  
+                  <td>{{class.Commande.adresse}}</td>
+                <td>{{class.PrixLivraison}}</td>
+              
+                 
+                     
+                     
+                    <td>{{class.livreur.Email }} </td>
+                     <td>{{class.Vehicule.getVehicule() }} </td>
+                     <td>  <a href="https://www.bing.com/maps?q={{class.Commande.latitude}}+%2C+{{class.Commande.longitude}}&cvid=993001ce00214b6ab9ba468a3866a2f6&aqs=edge.0.69i59j69i60l3.670j0j4&FORM=ANAB01&PC=NMTS">View Larger Map</a></small> 
+                     </td>
+                     <td><div class="countdown" dateD="{{ class.dateLivraison|date}}"></div></td>
+           
+
+                     
+                    
+                   
+               
+                <td>
+                  <a  class="btn btn-warning" href="{{path("livraison_delete",{'id':class.id}) }}">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspDelete&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+                  <br>
+                <a class="btn btn-info" href="{{path("livraison_update",{'id':class.id}) }}">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspUpdate&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+                <br>
+                <a class="btn btn-danger" href="{{path("bandelivraison",{'id':class.id}) }}">Bande Livraison</a></td>
+
+    
+      </tr>
+      {% endfor %}
+       
+                
+                  </tbody>
+                </table>
+                    {{ knp_pagination_render(tab) }}
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+      
+          <div class="col-md-9">
+            <div class="card card-primary">
+              <div class="card-body p-0">
+                <!-- THE CALENDAR -->
+                <div id="calendar"></div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+
+{{parent()}}
+  <script src='{{ asset("plugins/fullcalendar/main.js") }}'></script>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+          left  : 'prev,next today',
+          center: 'title',
+          right : 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialView: 'dayGridMonth',
+        timeZone: 'UTC',
+        events: [
+
+          {% for class in tab %}
+          {
+            title          : '{{ class.livreur.Email }}',
+            start          : '{{class.dateLivraison|date('Y-m-d')}}',
+            backgroundColor: '#f56954', //red
+            borderColor    : '#f56954', //red
+            allDay         : true
+          },
+          {
+            title          : '{{class.Vehicule.getVehicule() }}',
+            start          : '{{class.dateLivraison|date('Y-m-d')}}',
+            backgroundColor: '#54aaf5', //red
+            borderColor    : '#54aaf5', //red
+            allDay         : true
+          },
+          {% endfor %}
+        ],
+      });
+      calendar.render();
+    });
+
+  </script> 
+       <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>NOM</th>
+                    <th>PRENOM</th>
+                    <th>EMAIL</th>
+                    <th>TELEPHONE</th>
+                    <th>ROLE</th>
+                    <th>ETAT</th>
+                    <th>OPTION</th>
+                    
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for user in users %}
+                    {% for role in user.Role %}
+                    {% if  role == "ROLE_LIV" %}
+                    
+                          <tr>
+                          <td>{{user.id}}</td>
+                          <td>{{user.Nom}}</td>
+                          <td>{{user.Prenom}}</td>
+                          <td>{{user.Email}}</td>
+                          <td>{{user.Telephone}}</td>
+                          <td>Livreur</td>
+                          <td>{{user.Etat}}</td>
+                         
+                          <td><a class="btn btn-danger" href="{{path("admin_userdelete",{'id':user.id}) }}">Delete</a>
+
+                          </tr>
+                          
+
+                          </tbody>
+                          {% endif %}
+                          {% endfor %}
+                          {% else %}
+                          <td colspan="6">Il n'y a aucun Livreur inscrit!</td>
+                          {% endfor %}
+                </table>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+     </section>
+  
+ {#<!-- <script>
+    $(function () {
+
+      /* initialize the external events
+       -----------------------------------------------------------------*/
+      function ini_events(ele) {
+        ele.each(function () {
+
+          // create an Event Object (https://fullcalendar.io/docs/event-object)
+          // it doesn't need to have a start or end
+          var eventObject = {
+            title: $.trim($(this).text()) // use the element's text as the event title
+          }
+
+          // store the Event Object in the DOM element so we can get to it later
+          $(this).data('eventObject', eventObject)
+
+          // make the event draggable using jQuery UI
+          $(this).draggable({
+            zIndex        : 1070,
+            revert        : true, // will cause the event to go back to its
+            revertDuration: 0  //  original position after the drag
+          })
+
+        })
+      }
+
+      ini_events($('#external-events div.external-event'))
+
+      /* initialize the calendar
+       -----------------------------------------------------------------*/
+      //Date for the calendar events (dummy data)
+      var date = new Date()
+      var d    = date.getDate(),
+              m    = date.getMonth(),
+              y    = date.getFullYear()
+
+      var Calendar = FullCalendar.Calendar;
+      var Draggable = FullCalendar.Draggable;
+
+      var containerEl = document.getElementById('external-events');
+      var checkbox = document.getElementById('drop-remove');
+      var calendarEl = document.getElementById('calendar');
+
+      // initialize the external events
+      // -----------------------------------------------------------------
+
+      new Draggable(containerEl, {
+        itemSelector: '.external-event',
+        eventData: function(eventEl) {
+          return {
+            title: eventEl.innerText,
+            backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+            borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+            textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+          };
+        }
+      });
+
+      var calendar = new Calendar(calendarEl, {
+        headerToolbar: {
+          left  : 'prev,next today',
+          center: 'title',
+          right : 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        themeSystem: 'bootstrap',
+        //Random default events
+        events: [
+          {
+            title          : 'All Day Event',
+            start          : new Date(y, m, 1),
+            backgroundColor: '#f56954', //red
+            borderColor    : '#f56954', //red
+            allDay         : true
+          },
+        ],
+        editable  : true,
+        droppable : true, // this allows things to be dropped onto the calendar !!!
+        drop      : function(info) {
+          // is the "remove after drop" checkbox checked?
+          if (checkbox.checked) {
+            // if so, remove the element from the "Draggable Events" list
+            info.draggedEl.parentNode.removeChild(info.draggedEl);
+          }
+        }
+      });
+
+      calendar.render();
+     // $('#calendar').fullCalendar()
+
+      /* ADDING EVENTS */
+      var currColor = '#3c8dbc' //Red by default
+      // Color chooser button
+      $('#color-chooser > li > a').click(function (e) {
+        e.preventDefault()
+        // Save color
+        currColor = $(this).css('color')
+        // Add color effect to button
+        $('#add-new-event').css({
+          'background-color': currColor,
+          'border-color'    : currColor
+        })
+      })
+      $('#add-new-event').click(function (e) {
+        e.preventDefault()
+        // Get value and make sure it is not null
+        var val = $('#new-event').val()
+        if (val.length == 0) {
+          return
+        }
+
+        // Create events
+        var event = $('<div />')
+        event.css({
+          'background-color': currColor,
+          'border-color'    : currColor,
+          'color'           : '#fff'
+        }).addClass('external-event')
+        event.text(val)
+        $('#external-events').prepend(event)
+
+        // Add draggable funtionality
+        ini_events(event)
+
+        // Remove event from text input
+        $('#new-event').val('')
+      })
+    })
+  </script> -->
+<!-- DataTables  & Plugins --> #}
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+
+  <script>
+        var countdowns = $(".countdown");
+        countdowns.each(function()
+        {
+            var countDownDate = new Date($(this).attr("dateD")).getTime();
+            var countdownObj = $(this);
+            var myfunc = setInterval(function() {
+                var now = new Date().getTime();
+                var timeleft = countDownDate - now;
+
+                var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                console.log(countdownObj);
+                console.log("updating " + days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+                countdownObj.text(days + "d " + hours + "h " + minutes + "m " + seconds + "s");
+                if (timeleft < 0) {
+                    clearInterval(myfunc);
+                    countdownObj.text(" DELIVERY STARTED!!");
+                
+                }
+            }, 1000);
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Liste des joueurs</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Liste des joueurs</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title" > Liste des joueurs </h3>
+                                <ol class="float-sm-right">
+                                    {#     <a class="btn btn-info" {# href="{{path('event_add')}}"  >Ajouter</a> #}
+
+                                </ol>
+                            </div>
+
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                {#fgjldlkgflfgkjlfd#}
+
+                                <div id="divs">
+                                    <input type="text" id="search" placeholder="recherche 🔍">
+                                    <a class="tg-btn" href="" id="idup">UP ⬆️</a>
+                                    <a class="tg-btn" href="" id="iddown">DOWN ⬇️</a>
+                                </div>
+                                <br>
+
+
+                                <table id="t" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Nomjoueur</th>
+                                        <th>Prenomjoueur</th>
+                                        <th>Datedenaissance</th>
+                                        <th>Age</th>
+                                        <th>Sexe</th>
+                                        <th>Ville</th>
+                                        <th>Imgjoueur</th>
+                                        <th>actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="all">
+                                    {% for joueur in joueur %}
+                                        <tr>
+                                            <td>{{ joueur.nomjoueur }}</td>
+                                            <td>{{ joueur.prenomjoueur }}</td>
+                                            <td>{{ joueur.datedenaissance ? joueur.datedenaissance|date('Y-m-d') : '' }}</td>
+                                            <td>{{ joueur.age }}</td>
+                                            <td>{{ joueur.sexe }}</td>
+                                            <td>{{ joueur.ville }}</td>
+                                            {% if joueur.imgjoueur != null %}
+                                                <td><img src="{{ asset('uploads/' ~ joueur.imgjoueur) }}" alt="" style="width: 50px;height: 50px"> </td>
+                                            {% endif %}
+                                            {% if joueur.imgjoueur == null %}
+                                                <td>No.Image</td>
+                                            {% endif %}
+                                            <td>
+                                           {#     <a href="{{ path('app_joueur_show', {'idjoueur': joueur.idjoueur}) }}">👁️</a>#}
+                                                <a href="{{ path('app_joueur_backedit', {'idjoueur': joueur.idjoueur}) }}">✏️</a>
+                                                <a href="{{ path('app_joueur_show', {'idjoueur': joueur.idjoueur}) }}">👁️</a>
+                                                {{ include('joueur/Backdelete.html.twig') }}
+
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="9">no records found</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tbody id="search">
+                                    </tbody>
+                                </table>
+
+                                <a href="{{ path('app_joueur_backnew') }}">Ajouter ➕</a>
+                                <a class="tg-btn" href="{{ path('export') }}">Excel 📁</a>
+                                <a class="tg-btn" href="{{ path('joueur_stat') }}">Stat 📊</a>
+
+
+
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+                                </script>
+                                <script>
+                                    $( document ).ready(function() {
+                                        /*begin rechercher avancee multicritéres selon sujet et staus*/
+                                        $("#divs").keyup(function(e){
+                                            /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                                            var value = $("#search").val();
+                                            if(value.length >= 1 || value.length == 0  )
+                                            {
+                                                //    alert(value);
+                                                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                                                $.ajax({
+                                                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                                                    url : "{{ path('search_joueur') }}",
+                                                    /* La méthode utilisée pour transférer les données est GET */
+                                                    type : 'GET',
+                                                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                                                    data: {
+                                                        'searchValue' : value,
+                                                    },
+                                                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                                                    success : function(retour){
+                                                        if(retour){
+                                                            $('#t tbody#search').empty(); //empty the table brfore receiving the new table
+                                                            $.each(JSON.parse(retour), function(i, obj) {
+                                                                $('#t tbody#all').hide();
+                                                                $('#t tbody#search').append('<tr><td>    '+obj.nomjoueur+'  </td><td>'+obj.prenomjoueur+' </td> <td>'+obj.datedenaissance.substring(0,10) +' </td>  <td>'+obj.age+' </td> <td>'+obj.sexe+' </td> <td>'+obj.ville+' </td> <td>'+obj.imgjoueur+' </td> <td> <a href="/joueur/'+obj.idjoueur+'/backedit">🖊️</a></td>   </tr>');
+                                                            });
+                                                        }
+                                                        else
+                                                        {
+
+                                                            $('#t tbody#all').show();
+                                                            $('#t tbody#search').empty();
+                                                            $('#t tbody#search').fadeIn('fast');
+
+                                                        }
+                                                    },
+                                                });
+                                                return false;
+                                            }
+                                        });
+                                        /*end rechercher avancee multicritéres selon sujet et staus*/
+                                        /*begin trie up selon id*/
+                                        $("#idup").click(function(e){
+                                            /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                                            var value = $("#search").val();
+                                            var value3 ="ASC";
+                                            //    alert(value);
+                                            /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                                            $.ajax({
+                                                /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                                                url : "{{ path('search_joueur') }}",
+                                                /* La méthode utilisée pour transférer les données est GET */
+                                                type : 'GET',
+                                                /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                                                data: {
+                                                    'searchValue' : value,
+                                                    'orderid': value3
+                                                },
+                                                /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                                                success : function(retour){
+                                                    if(retour){
+                                                        $('#t tbody#search').empty();
+                                                        $.each(JSON.parse(retour), function(i, obj) {
+                                                            $('#t tbody#all').hide();
+                                                            $('#t tbody#search').append('<tr><td>    '+obj.nomjoueur+'  </td><td>'+obj.prenomjoueur+' </td> <td>'+obj.datedenaissance.substring(0,10) +' </td>  <td>'+obj.age+' </td> <td>'+obj.sexe+' </td> <td>'+obj.ville+' </td> <td>'+obj.imgjoueur+' </td> <td> <a href="/joueur/'+obj.idjoueur+'/backedit">🖊️</a></td>   </tr>');
+                                                        });
+                                                    }
+                                                    else
+                                                    {
+                                                        $('#t tbody#all').show();
+                                                        $('#t tbody#search').empty();
+                                                        $('#t tbody#search').fadeIn('fast');
+                                                    }
+                                                },
+                                            });
+                                            return false;
+
+                                        });
+                                        /*end trie up selon id*/
+                                        /*begin trie down selon id*/
+                                        $("#iddown").click(function(e){
+                                            /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                                            var value = $("#search").val();
+                                            var value3 ="DESC";
+                                            //    alert(value);
+                                            /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                                            $.ajax({
+                                                /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                                                url : "{{ path('search_joueur') }}",
+                                                /* La méthode utilisée pour transférer les données est GET */
+                                                type : 'GET',
+                                                /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                                                data: {
+                                                    'searchValue' : value,
+                                                    'orderid': value3
+                                                },
+                                                /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                                                success : function(retour){
+                                                    if(retour){
+                                                        $('#t tbody#search').empty();
+                                                        $.each(JSON.parse(retour), function(i, obj) {
+                                                            $('#t tbody#all').hide();
+                                                            $('#t tbody#search').append('<tr><td>    '+obj.nomjoueur+'  </td><td>'+obj.prenomjoueur+' </td> <td>'+obj.datedenaissance.substring(0,10) +' </td>  <td>'+obj.age+' </td> <td>'+obj.sexe+' </td> <td>'+obj.ville+' </td> <td>'+obj.imgjoueur+' </td> <td> <a href="/joueur/'+obj.idjoueur+'/backedit">🖊️</a></td>   </tr>');
+                                                        });
+                                                    }
+                                                    else
+                                                    {
+                                                        $('#t tbody#all').show();
+                                                        $('#t tbody#search').empty();
+                                                        $('#t tbody#search').fadeIn('fast');
+                                                    }
+                                                },
+                                            });
+                                            return false;
+
+                                        });
+                                        /*end trie down selon id*/
+                                    });
+                                </script>
+
+
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+    <!-- DataTables  & Plugins -->
+    <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+    </script>
+
+{% endblock %}

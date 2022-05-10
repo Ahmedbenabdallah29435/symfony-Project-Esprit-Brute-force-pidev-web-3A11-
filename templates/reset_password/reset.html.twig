@@ -1,0 +1,44 @@
+{% extends 'baseCart.html.twig' %}
+
+
+{% block body %}
+ <!-- Begin Mobile Menu Area -->
+ <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+    <div class="container"> 
+        <div class="row">
+            <div class="mobile-menu">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Mobile Menu Area End Here -->
+</header>
+<!-- Header Area End Here -->
+<!-- Begin Li's Breadcrumb Area -->
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{{path('home')}}">Home</a></li>
+                <li class="active">Account</li>
+               </ul>
+        </div>
+    </div>
+</div>
+<!-- Li's Breadcrumb Area End Here -->
+<!-- Begin Login Content Area -->
+<div class="page-section mb-60">
+    <div class="container">
+            <div class="login-form">
+                <h4 class="login-title">new event</h4>
+                    {{ form_start(resetForm) }}
+                        {{ form_row(resetForm.plainPassword) }}
+                        <button class="register-button mt-0">new event</button>
+                    {{ form_end(resetForm) }}
+    
+                </div>
+            </div>
+    </div>
+{% endblock %}
+

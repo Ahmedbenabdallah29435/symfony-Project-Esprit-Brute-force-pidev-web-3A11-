@@ -1,0 +1,239 @@
+{% extends "baseCart.html.twig" %}
+
+{% block body %}
+    <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner text-center">
+                        <div class="breadcrumb_iner_item">
+                            <h2>Nos Evenements</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+
+  <!-- Begin Body Wrapper -->
+        <div class="body-wrapper">
+            <!-- Begin Li's Main Blog Page Area -->
+            <div class="li-main-blog-page li-main-blog-details-page pt-60 pb-60 pb-sm-45 pb-xs-45">
+                <div class="container">
+                    <div class="row">
+                           
+
+                        <!-- Begin Li's Main Content Area -->
+                        <div class="col-lg-9 order-lg-2 order-1">
+                                    
+                                       <center><h1 class="li-blog-heading pt-25"><div class="countdown" dateD="{{ tab.date|date}}"></div></h1></center>
+                            <div class="row li-main-content">
+                                <div class="col-lg-12">
+                                    <div class="li-blog-single-item pb-30">
+                                        <div class="li-blog-banner">
+                                            <a><img class="img-full" src="{{asset('uploads/') ~ tab.affiche}}"  height="350"></a>
+                                        </div>
+                                        <div class="li-blog-content">
+                                            <div class="li-blog-details">
+                                                <h3 class="li-blog-heading pt-25"><a href="#">{{tab.nom}}</a></h3>
+                                                <div class="li-blog-meta">
+                                                    <a class="author" href="#"><i class="fa fa-map-marker"></i>{{tab.adresse}}</a>
+                                                    <a class="comment" href="#affichage_commentaire"><i class="fa fa-comment-o"></i> {{comments | length}} Commentaires</a>
+                                                    <a class="post-time" href="#"><i class="fa fa-calendar"></i>DateDebut {{tab.date|date('Y-m-d H:i:s')}}</a>
+                                                    <a class="post-time" href="#"><i class="fa fa-calendar"></i>DateFin {{tab.Datefin|date('Y-m-d H:i:s')}}</a>
+                                                     
+                                                </div>
+                                        
+                                                <p>{{tab.description}}</p>
+                                                <!-- Begin Blog Blockquote Area -->
+                                                <div class="li-blog-blockquote">
+                                                    <blockquote>
+                                                        <p>{{tab.longdesc}}</p>
+                                                    </blockquote>
+                                                </div>
+                                                <!-- Blog Blockquote Area End Here -->
+                                                
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="container">
+                                        <div class="row">
+
+                                           {{form_start(noteform)}}
+                                         <div>
+                                              {{form_widget(noteform.nom , {'value':tab.nom ,'type':'hidden'})}}
+                                            
+                                              
+
+                                           </div>
+
+                                                  {% set somme = 0 %}
+                                                 {% for eve in Notes %}
+                                                       {% set somme = (eve.note / Notes|length)+ somme %}  
+                                                 {% endfor %}
+                                                     <div class="rateyo" id= "rating"
+                                                        data-rateyo-rating={{somme}}
+                                                        data-rateyo-num-stars="5"
+                                                        data-rateyo-score="3">
+                                                        </div>
+                                                        <br>
+                                                  <style>
+                                                  
+                                                  h3{
+                                                     color:grey;
+                                                  
+                                                  }
+                                                  </style>
+                                             
+                        {{ form_widget(noteform.ajouter, {'attr': {'class': 'register-button mt-0'} }) }}<br>
+                                        
+                                                <br><br> <h3>Rating : {{somme|number_format(1, '.')}} /5 &nbsp;&nbsp; {{ Notes|length}} Avis </h3>
+                                                 
+                                                 {{form_widget(noteform.note , { 'id': 'rating','type':'hidden'} ) }}
+
+                                                          
+                                                        
+                                                 <br>
+ 
+                                                
+                    
+                                                  
+                                                    
+                                                 <br>
+                                                   {{form_end(noteform)}}
+                                           </div>
+                                    </div>       
+                                        
+                                           
+                    
+                                       
+                                        
+                                    <!-- Begin Li's Blog Comment Section -->
+                                    <div class="li-comment-section" id="affichage_commentaire">
+                                       
+                                        <h3>{{comments | length}} Commentaires</h3>
+                                         {% for comment in comments %}
+                                          {% if comment.parent == null %}
+                                        <ul>
+                                            <li>
+                                                <div class="author-avatar pt-15">
+                                                    <img src="{{asset('images/product-details/user.png')}}" alt="User">
+                                                </div>
+                                                <div class="comment-body pl-15">
+                                                   <a href='{{ path('commentaire_like',{'id':comment.id})}}' class="btn btn-link js-like">
+                                                   {% if app.user and comment.isLikedByUtilisateur(app.user) %}
+                                                   <i class="fas fa-thumbs-up"></i>
+                                                   {% else %}
+                                                   <i class="far fa-thumbs-up"></i>
+                                                   {% endif %}
+                                                    
+                                                    
+                                                    <span class="js-likes">{{comment.likes| length}}</span>
+                                                    <span class="js-label">J'aime</span>
+                                                    </a>
+                                                    {% if is_granted("ROLE_ADMIN") %}
+                                                        
+                                                        <span class="reply-btn pt-15 pt-xs-5">
+                                
+                                                     <a href="#ajout_commentaire" data-reply data-id={{comment.id}}>Répondre</a></span>
+                                                   {% endif %}
+                                                   
+                                                    <h5 class="comment-author pt-15">{{comment.pseudo}}</h5>
+                                                    <div class="comment-post-date">
+                                                        {{comment.createdAt | date('y-m-d  h:m:s')}}
+                                                    </div>
+                                                    <p>{{comment.contenu}}</p>
+                                                </div>
+                                            </li>
+                                            {% for reponse in comment.reponses %}
+                                             <li class="comment-children">
+                                                <div class="author-avatar pt-15">
+                                                    <img src="{{asset('images/product-details/admin.png')}}" alt="Admin">
+                                                </div>
+                                                <div class="comment-body pl-15">
+                                                    <h5 class="comment-author pt-15">{{reponse.pseudo}}</h5>
+                                                    <div class="comment-post-date">
+                                                        {{reponse.createdAt | date('y-m-d  h:m:s')}}
+                                                    </div>
+                                                    <p>{{reponse.contenu}}</p>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+					                        {% endif %}
+                                           
+                                        </ul>
+                                        {% endfor %}
+                                    </div>
+                                    
+
+                                    <!-- Li's Blog Comment Section End Here -->
+                                    <!-- Begin Blog comment Box Area -->
+                                    <div class="li-blog-comment-wrapper" id="ajout_commentaire">
+                                        <h3>Laisse un commentaire</h3>
+                                        <p>Votre adresse email ne sera pas publiée. Tous les champs sont requis </p>
+                                        {{ form_start(Commentaires_Form,{'attr': {'novalidate': 'novalidate'}} ) }}
+                                        
+                                            <div class="comment-post-box">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <label>Commentaire</label>
+                                                       
+                                                        {{ form_widget(Commentaires_Form.contenu, {'attr': {'class': 'form-control'}}) }}
+                                                        {{ form_errors(Commentaires_Form.contenu,{'attr':{"class":"mb-0"}}) }}
+                                                    </div>
+                                                     <div class="col-lg-4 col-md-4 col-sm-4 mt-5 mb-sm-20 mb-xs-20">
+                                                        <label>Pseudo</label>
+                                                        {% if not app.user %} 
+                                                         {{ form_widget(Commentaires_Form.Pseudo, {'attr': {'class': 'coment-field'}}) }}
+                                                         {{ form_errors(Commentaires_Form.Pseudo,{'attr':{"class":"mb-0"}}) }}
+                                                         {% else %}
+                                                         {{ form_widget(Commentaires_Form.Pseudo, {'attr': {'value': app.user.Nom ,readonly:true} } ) }}
+                                                         {{ form_errors(Commentaires_Form.Pseudo,{'attr':{"class":"mb-0"}}) }}
+                                                         {% endif %}
+
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 mt-5 mb-sm-20 mb-xs-20">
+                                                        <label>Email</label>
+                                                        {% if not app.user %}                                                        
+                                                         {{ form_widget(Commentaires_Form.email, {'attr': {'class': 'coment-field'}}) }}
+                                                         {{ form_errors(Commentaires_Form.email,{'attr':{"class":"mb-0"}}) }}
+                                                         {% else %}
+                                                         {{ form_widget(Commentaires_Form.email, {'attr': {'value': app.user.Email,readonly:true}}) }}
+                                                         {{ form_errors(Commentaires_Form.email,{'attr':{"class":"mb-0"}}) }}
+                                                         {% endif %}
+                                                    </div>
+                                                   
+    
+                                                    <div class="col-lg-12">
+                                                        <div class="coment-btn pt-30 pb-sm-30 pb-xs-30 f-left">
+                                                            
+                                                            {{ form_widget(Commentaires_Form.Envoyer, {'attr': {'class': 'li-btn-2'} }) }}
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{ form_end(Commentaires_Form) }}    
+                                        
+                                        
+                                    </div>
+                                    <!-- Blog comment Box Area End Here -->
+                                </div>
+                            </div>
+                        </div>
+                     
+                        <!-- Li's Main Content Area End Here -->
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Main Blog Page Area End Here -->
+        </div>
+        <!-- Body Wrapper End Here -->
+{% endblock %}
+

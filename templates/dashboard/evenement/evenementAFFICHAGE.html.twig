@@ -1,0 +1,140 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Liste des Evenements</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Liste des Evenements</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+               
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title" > Liste des evenements </h3>
+                 <ol class="float-sm-right">
+                <a class="btn btn-info" href="{{path('event_add')}}" >Ajouter</a>
+                </ol>
+              </div>
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Nom </th>
+                    <th>Prix</th>
+                    <th>Adresse</th>
+                    <th>Date</th>
+                    <th>Datefin</th>
+                    <th>description</th>
+                    <th>affiche</th>
+                    <th>Action</th> 
+                    <th>Qr</th>      
+              </tr>
+                  </thead>
+                  <tbody>
+                      {% for evenement in tab %}
+                  <tr>
+                    <td>{{ evenement.nom}}</td>
+                    <td>{{ evenement.prix}}</td>
+                    <td>{{ evenement.adresse}}</td>
+                    <td>{{ evenement.date  | date("d/m/Y")}}</td>
+                    <td>{{ evenement.datefin  | date("d/m/Y")}}</td>
+                    <td>{{ evenement.description}}</td>
+                    <td><img src="{{asset('uploads/') ~ evenement.affiche}}"  width="100" height="100"></td>
+                     <td>
+                        <a class="btn btn-info" href="{{path('ev_update',{id : evenement.id })}}">Modifier</a>
+                        <a class="btn btn-warning"  href="{{path('ev_delete',{id : evenement.id })}}">Supprimer</a>
+                         <a class="btn btn-success"  href="{{path('commentaires',{id : evenement.id })}}">Commentaires</a>
+                       
+                         
+                    </td> 
+                    {% if evenement.prix != null %}
+               
+                {% set var = "http://127.0.0.1:8000/reclamation/true"   %}
+
+                <td><img src="{{ qr_code_url(var)}}" style="width: 150px; height: 150px"/></td>
+
+                {% else %}
+                {#<td>{{ r.createdAt|date('Y-m-d H:i:s') }}</td> #}
+                
+                 <td><img src="{{ qr_code_url("http://127.0.0.1:8000/reclamation/error")}}" style="width: 150px; height: 150px"/></td>
+
+                
+                {% endif %} 
+                           
+                     </tr>
+                  {% endfor %}
+                  </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<!-- DataTables  & Plugins -->
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+
+{% endblock %}

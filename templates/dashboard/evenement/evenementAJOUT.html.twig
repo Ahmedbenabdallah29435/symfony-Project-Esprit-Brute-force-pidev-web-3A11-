@@ -1,0 +1,218 @@
+{% extends "baseBack.html.twig" %}
+{% block body %}
+<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/@esri/arcgis-rest-request@3.0.0/dist/umd/request.umd.js"></script>
+<script src="https://unpkg.com/@esri/arcgis-rest-geocoding@3.0.0/dist/umd/geocoding.umd.js"></script>
+<script src="https://unpkg.com/@esri/arcgis-rest-auth@3.0.0/dist/umd/auth.umd.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+     <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Ajouter un Evenement</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active"><a  href="{{path('ev_aff')}}">Liste Des Evenements</a></li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Ajouter un Evenement</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              {{ form_start(form_evenement,{'attr': {'novalidate': 'novalidate'}} ) }}
+               
+                <div class="card-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Nom Evenement</label>
+                    {{ form_widget(form_evenement.nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form_evenement.nom,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Prix</label>
+                    {{ form_widget(form_evenement.prix, {'attr': {'class': 'form-control'}}) }}
+                     {{ form_errors(form_evenement.prix,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                     <label for="exampleInputPassword1">Adresse</label>
+                    {{ form_widget(form_evenement.adresse, {'attr': {'class': 'form-control'} ,'id': 'adresse'}) }}
+                     {{ form_errors(form_evenement.adresse,{'attr':{"class":"mb-0"} ,'id': 'adresse'}) }}
+                   </div>
+
+
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Date Debut </label>
+                    {{ form_widget(form_evenement.date) }}
+                     {{ form_errors(form_evenement.date,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Date Fin </label>
+                    {{ form_widget(form_evenement.datefin) }}
+                     {{ form_errors(form_evenement.datefin,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Description </label>
+                    {{ form_widget(form_evenement.description, {'attr': {'class': 'form-control'}}) }}
+                     {{ form_errors(form_evenement.description,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1"> Long Description </label>
+                    {{ form_widget(form_evenement.longdesc, {'attr': {'class': 'form-control'}}) }}
+                     {{ form_errors(form_evenement.longdesc,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                   <div class="form-group">
+                    <label for="exampleInputPassword1">Affiche</label>
+                    {{ form_widget(form_evenement.affiche, {'attr': {'class': 'form-control'}}) }}
+                     {{ form_errors(form_evenement.affiche,{'attr':{"class":"mb-0"}}) }}
+                </div>
+                  
+                
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    {{ form_widget(form_evenement.ajouter, {'attr': {'class': 'btn btn-primary'}}) }}
+                </div>
+            
+              
+            
+                <!-- /.card -->
+
+              </div>
+
+                      {{ form_widget(form_evenement.longitude,  {'id': 'longitudee','type':'hidden'} ) }}
+               {{ form_widget(form_evenement.latitude,  {'id': 'latitudee','type':'hidden'} ) }}
+                <!-- /.card-body -->
+                <body>
+                              <div id="map"></div>
+                             
+                        
+                          
+                            </body>
+                            {% block stylsheets %}
+                            <style>
+                            #map {
+                              height:60vh ; 
+                              width: 150vh;
+                              border: 2px solid black;
+                              bottom: -25px;
+                              left: 30px;
+                            }
+                            
+                            </style>
+                            {% endblock %}
+
+
+
+                
+            
+              {{ form_end(form_evenement) }}
+            </div>
+            <!-- /.card -->
+
+              
+
+          
+
+          </div>
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+
+  <script>
+
+const apiKey = "AAPK8f27da23013b4b43b967a2b4cf4fed55MwFkbld8ACq5Y70fgYUK4aLGkBkSdvXT5zEXvakLLEam6hJfa4BHfnL6LbFTkJxf";
+
+const basemapEnum = "ArcGIS:Navigation";
+const coordinates = document.getElementById('coordinates');
+const latitude = document.getElementById('latitude');
+const test= document.getElementById('test');
+const map = new mapboxgl.Map({
+container: "map",
+style: `https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${basemapEnum}?type=style&token=${apiKey}`,
+cooperativeGestures: true,
+zoom: 6,
+
+center: [9.541625307219647, 35.660282489135156], // starting position ([lng, lat] for Mombasa, Kenya)
+
+});
+
+const marker = new mapboxgl.Marker({
+draggable: true
+})
+.setLngLat([9.871215150968851, 37.26823489806061])
+.addTo(map);
+
+function onDragEnd() {
+const lngLat = marker.getLngLat();
+
+
+const coords = lngLat.toArray();
+
+const authentication = new arcgisRest.ApiKey({
+  key: apiKey
+});
+
+var label ='' ;
+arcgisRest
+  .reverseGeocode(coords, {
+    authentication
+  })
+  .then((result) => {
+
+    const lngLat = [result.location.x, result.location.y];
+
+    const label = `${result.address.LongLabel}`;
+    const longitudee= `${lngLat[0].toLocaleString()}`;
+    const latitudee= `${lngLat[1].toLocaleString()}`;
+
+    $("#longitudee").val(longitudee)
+    $("#latitudee").val(latitudee)
+    $("#adresse").val(label)
+
+  })
+   
+  .catch((error) => {
+    alert("There was a problem using the reverse geocode service. See the console for details.");
+    console.error(error);
+  });
+ 
+
+}
+
+marker.on('dragend', onDragEnd);
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.NavigationControl());
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

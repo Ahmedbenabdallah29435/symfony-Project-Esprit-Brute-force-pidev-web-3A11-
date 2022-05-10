@@ -1,0 +1,149 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>E-commerce</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">E-commerce</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card card-solid">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <h3 class="d-inline-block d-sm-none">Commande client : {{ tab.nomClient}} {{ tab.prenomClient }}</h3>
+             
+              
+              {% for des in tab1 %}
+              {% if des.commande.id == tab.id %}
+              <br>
+              <h3 class="d-inline-block ">*{{ des.produit.nomProduit  }}</h3>
+
+              <div class="col-12 ">
+                <div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<img src="{{asset('uploads/') ~ des.produit.image}}"  height="400" width="400" ></div>
+
+                
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="col-12 col-sm-6">
+              <h3 class="my-3">Commande client : {{ tab.nomClient}} {{ tab.prenomClient }}</h3>
+                <br>
+              <hr>
+              
+           
+
+              
+
+              <br>
+
+              <h4>Etat de commande :</h4>
+              {% if tab.etatCommande == 1 %}
+
+            
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-default text-center active">
+                  <input type="radio" name="color_option" id="color_option_a1" autocomplete="off" checked>
+                  Commande livrée
+                  <br>
+                  <i class="fas fa-circle fa-2x text-green"></i>
+                </label>
+              </div>
+              {% else %}
+
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-default text-center">
+                    <input type="radio" name="color_option" id="color_option_a4" autocomplete="off">
+                    Commande non livrée
+                    <br>
+                    <i class="fas fa-circle fa-2x text-red"></i>
+                  </label>
+              </div>
+
+              {% endif %}
+
+              <br>
+              <br>
+              <div class="bg-gray py-2 px-3 mt-4">
+                <h2 class="mb-0">
+                  {{tab.montant}}DT
+                </h2>
+              </div>
+
+              <br>
+              <br>
+
+             
+
+                <div class="contact-info">
+            
+                    
+
+                     <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.bing.com/maps/embed?h=400&w=500&cp=36.81972927634964~10.17608642578125&lvl=11&typ=d&sty=r&src=SHELL&FORM=MBEDV8" style="border: 1px solid black"></iframe><br /><small><a href="https://www.bing.com/maps?q={{tab.latitude}}+%2C+{{tab.longitude}}&cvid=993001ce00214b6ab9ba468a3866a2f6&aqs=edge.0.69i59j69i60l3.670j0j4&FORM=ANAB01&PC=NMTS">View Larger Map</a></small> 
+
+                     
+                    {# <iframe style="border:0; width: 100%; height: 350px;" class="img-fluid" src="https://maps.google.com/maps?q=+{{tab.latitude}}+,+{{tab.longitude}}+&hl=fr&z=14&amp;output=embed" frameborder="0" allowfullscreen></iframe> #}
+                    {# <iframe style="border:0; width: 100%; height: 350px;" src='http://www.bing.com/maps/embed/viewer.aspx?v=3&cp="&{{Latitude}}&"~"&{{tab.longitude}}&"&lvl=17&w=300&h=200&sty=r&typ=s&pp=~~"&{{tab.latitude}}&"~"&{{tab.longitude}}&"&ps=55&dir=0&mkt=en-gb&src=SHELL&form=BMEMJS'></iframe> #}
+               
+
+                <div class="card-body pt-0">
+                    <div class="row">
+                      <div class="col-7">
+                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                          <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: {{ tab.adresse}}, {{tab.postcode}}</li>
+                          <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: {{ tab.phone }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <a href="{{path("liv_add",{'id':tab.id}) }}">
+                  <div class="btn btn-primary btn-lg btn-flat">
+                    <i class="nav-icon fas fa-truck"></i>
+                   Delivrer
+                  </div>
+                </a>
+                </div>
+            </div>
+
+          
+
+
+
+             
+
+              
+
+            </div>
+          </div>
+       
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}

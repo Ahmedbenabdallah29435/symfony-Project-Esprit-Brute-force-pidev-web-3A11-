@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<title>ImagesPdp index</title>
+
+{% block body %}
+    <h1>ImagesPdp index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for images_pdp in images_pdps %}
+            <tr>
+                <td>{{ images_pdp.id }}</td>
+                <td>{{ images_pdp.nom }}</td>
+                <td>
+                    <a href="{{ path('images_pdp_show', {'id': images_pdp.id}) }}">show</a>
+                    <a href="{{ path('images_pdp_edit', {'id': images_pdp.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('images_pdp_new') }}">Create new</a>
+{% endblock %}

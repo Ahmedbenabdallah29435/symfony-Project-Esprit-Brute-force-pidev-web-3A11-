@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit ImagesPdp</title>
+
+{% block body %}
+    <h1>Edit ImagesPdp</h1>
+
+    {{ include('images_pdp/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('images_pdp_index') }}">back to list</a>
+
+    {{ include('images_pdp/_delete_form.html.twig') }}
+{% endblock %}

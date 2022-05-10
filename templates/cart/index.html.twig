@@ -1,0 +1,100 @@
+{% extends "baseCart.html.twig" %}
+
+
+{% block body %}
+
+ <!-- Begin Li's Breadcrumb Area -->
+ <div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Shopping Cart</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Li's Breadcrumb Area End Here -->
+<!--Shopping Cart Area Strat-->
+<div class="Shopping-cart-area pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="li-product-remove">remove</th>
+                                    <th class="li-product-thumbnail">images</th>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="li-product-price">Unit Price</th>
+                                    <th class="li-product-quantity">Quantity</th>
+                                    <th class="li-product-subtotal">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for element in elements %}
+                                <tr>
+                                    <td class="li-product-remove"><a href="{{path("cart_delete",{id: element.produit.id})}}"><i class="fa fa-times"></i></a></td>
+                                    <td class="li-product-thumbnail"><a href="#"><img src="{{asset('uploads/') ~ element.produit.image }}" width="200" height="200" alt="Li's Product Image"></a></td>
+                                    <td class="li-product-name"><a href="#">{{ element.produit.nomProduit}}</a></td>
+                                    <td class="li-product-price"><span class="amount">{{ element.produit.prixProduit}}DT</span></td>
+                                    <td class="quantity">
+                                        <a href="{{path("cart_remove",{id: element.produit.id})}}"><i class="fa fa-angle-down" style="font-size:28px"></i></a>
+                                        <a href="{{path("cart_add",{id: element.produit.id})}}"><i class="fa fa-angle-up" style="font-size:28px"></i></a>
+                                        <div>
+                                            
+                                            <span >{{ element.quantite}}</span>
+                                        
+                                            </div>
+                                           
+                                        </div>
+                                    </td>
+                                    <td class="product-subtotal"><span class="amount">{{ element.quantite * element.produit.prixProduit }}DT</span></td>
+                                </tr>
+                                {% else %}
+                                <td colspan="5" class="text-center">Votre Panier est vide</td>
+                               {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="coupon-all">
+                                <div class="coupon">
+                                    <div class="cart-page-total"> 
+                                        <a href="{{path("cart_deleteall")}}">Vider le panier</a>
+                                    </div>  
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 ml-auto">
+                            <div class="cart-page-total">
+                                <h2>Cart totals</h2>
+                                
+                                <ul>
+                                   
+                                    <li>{{ total }}DT <span></span></li>
+                                </ul>
+                                {% if total == 0 %}
+                                <a href="{{path('home')}}">fill the basket</a>
+                                {% else %}
+                                <a href="{{path('commande')}}">Proceed to checkout</a>
+                                {% endif %}
+
+                              
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Shopping Cart Area End-->
+{% endblock %}

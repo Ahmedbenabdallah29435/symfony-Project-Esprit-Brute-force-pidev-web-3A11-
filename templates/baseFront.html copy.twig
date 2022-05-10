@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Techmasters{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+               
+    <link rel="icon" href="{{ asset('img/favicon.png') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/bootstrap.min.css') }} ">
+    <!-- animate css1 -->
+    <link rel="stylesheet"href="{{ asset('css1/animate.css') }}">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/owl.carousel.min.css') }}">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/all.css') }} ">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/flaticon.css') }} ">
+    <link rel="stylesheet"href="{{ asset('css1/themify-icons.css') }} ">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/magnific-popup.css') }}" >
+    <!-- swiper CSS -->
+    <link rel="stylesheet"href="{{ asset('css1/slick.css') }}" >
+   
+    <!-- style CSS -->
+    <link rel="stylesheet" href="{{ asset('css1/style.css') }}">
+
+
+             
+        {% endblock %}
+
+        {% block javascripts %}
+          <!-- jquery plugins here-->
+    <script src="{{ asset('js1/jquery-1.12.1.min.js') }}"></script>
+    <!-- popper js -->
+    <script src="{{ asset('js1/popper.min.js') }}"></script>
+    <!-- bootstrap js -->
+    <script src="{{ asset('js1/bootstrap.min.js') }}"></script>
+    <!-- easing js -->
+    <script src="{{ asset('js1/jquery.magnific-popup.js') }}"></script>
+    <!-- swiper js -->
+    <script src="{{ asset('js1/swiper.min.js') }}"></script>
+    <!-- swiper js -->
+    <script src="{{ asset('js1/masonry.pkgd.js') }}"></script>
+    <!-- particles js -->
+    <script src="{{ asset('js1/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('js1/jquery.nice-select.min.js') }}"></script>
+    <!-- slick js -->
+    <script src="{{ asset('js1/slick.min.js') }}"></script>
+    <script src="{{ asset('js1/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('js1/waypoints.min.js') }}"></script>
+    <script src="{{ asset('js1/contact.js') }}"></script>
+    <script src="{{ asset('js1/jquery.ajaxchimp.min.js') }}"></script>
+    <script src="{{ asset('js1/jquery.form.js') }}"></script>
+    <script src="{{ asset('js1/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('js1/mail-script.js') }}"></script>
+    <!-- custom js -->
+    <script src="{{ asset('js1/custom.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>

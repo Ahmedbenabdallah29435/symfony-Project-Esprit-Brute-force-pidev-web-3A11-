@@ -1,0 +1,76 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+ <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Modifier Boutique</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+             
+                  {{ form_start(Fbout,{'attr': {'novalidate': 'novalidate'}} ) }}
+                <div class="card-body">
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Nom Boutique </label>
+                    {{ form_widget(Fbout.nomBoutique, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(Fbout.nomBoutique,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Description Boutique</label>
+                    {{ form_widget(Fbout.descBoutique, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(Fbout.descBoutique,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Adresse Boutique </label>
+                    {{ form_widget(Fbout.adresseBoutique, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(Fbout.adresseBoutique,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Commerçant</label>
+                    {{ form_widget(Fbout.Commercant, {'attr': {'class': 'form-control'}}) }}
+                     {{ form_errors(Fbout.Commercant,{'attr':{"class":"mb-0"}}) }}
+                  </div>
+                  <div class="form-group">
+                  <label for="exampleInputPassword1">Image</label>
+                  {% for image in Fbout.images %}
+                    <img src="{{ asset('/uploads/' ~ image.name) }}" alt="" width="200">
+                   
+                     {% endfor %} 
+                      </div>
+
+
+                  
+                </div>
+                <!-- /.card-body -->
+
+                
+             {{ form_end(Fbout) }}
+             
+            </div>
+            <!-- /.card -->
+
+          
+
+          </div>
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+

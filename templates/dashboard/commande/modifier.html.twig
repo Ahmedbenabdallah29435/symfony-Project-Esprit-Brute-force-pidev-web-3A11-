@@ -1,0 +1,92 @@
+{% extends "baseBack.html.twig" %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Modifier Commande</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+            
+                {{ form_start(form) }}
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Nom client</label>
+                    {{ form_widget(form.nomClient, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nomClient, {'attr': {'class': 'form-control'}}) }}
+
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Prenom Client</label>
+                    {{ form_widget(form.prenomClient, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.prenomClient, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Adresse </label>
+                    {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.adresse, {'attr': {'class': 'form-control'}}) }}
+
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Code Postal </label>
+                    {{ form_widget(form.postcode, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.postcode, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Phone </label>
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.phone, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Montant </label>
+                    {{ form_widget(form.montant, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.montant, {'attr': {'class': 'form-control'}}) }}
+
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Etat Commande </label>
+                    {{form_widget(form.etatCommande )}}
+
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Mode Paiement </label>
+                    {{ form_widget(form.modePaiemenet, {'attr': {'class': 'form-control'}}) }}
+
+                  </div>
+                  
+                  
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+             {{ form_end(form) }}
+           
+            </div>
+            <!-- /.card -->
+
+          
+
+          </div>
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}

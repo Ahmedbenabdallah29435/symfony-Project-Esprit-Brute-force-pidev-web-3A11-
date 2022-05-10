@@ -1,0 +1,128 @@
+{% extends "baseCart.html.twig" %}
+{% block title %}<title>Techmasters | Register</title> {% endblock %}
+{% block body %}
+ <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner text-center">
+                        <div class="breadcrumb_iner_item">
+                            <h2>register</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner text-center">
+                        <div class="breadcrumb_iner_item">
+                            <h2>Vos Informations</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+                <!-- Begin Mobile Menu Area -->
+                <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+                    <div class="container"> 
+                        <div class="row">
+                            <div class="mobile-menu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mobile Menu Area End Here -->
+            </header>
+            <!-- Header Area End Here -->
+            <!-- Begin Li's Breadcrumb Area -->
+            <div class="breadcrumb-area">
+                <div class="container">
+                    <div class="breadcrumb-content">
+                        <ul>
+                            <li><a href="{{path('home')}}">Home</a></li>
+                            <li class="active">Register</li>
+                           </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Breadcrumb Area End Here -->
+            <!-- Begin Login Content Area -->
+            <div class="page-section mb-60">
+                <div class="container">
+                    <div class="row">       
+                                <div class="login-form">
+                                    <h4 class="login-title"><a href="{{path('acteurSAdd')}}">Or register with a Professional account</a></h4>
+                                    {{ form_start(userForm,{'attr': {'novalidate': 'novalidate'}} ) }}
+                                    <div class="row">
+                                        <div class="col-md-6 col-12 mb-20">
+                                           
+                                          <td>{{ form_label(userForm.Prenom,"First Name") }}</td>
+                                          <td>{{ form_widget(userForm.Prenom,{'attr':{"class":"mb-0"}}) }}</td>
+                                         </div>
+                                        <div class="col-md-6 col-12 mb-20">
+                                          
+                                           {{ form_label(userForm.Nom,"Last Name") }}
+                                           {{ form_widget(userForm.Nom,{'attr':{"class":"mb-0"}}) }}
+                                         
+                                        </div>
+                                       
+                                        <div class="col-md-12 mb-20">
+                                            {{ form_label(userForm.Email,"Email Adress") }}
+                                            {{ form_widget(userForm.Email,{'attr':{"class":"mb-0"}}) }}
+                                          </div>
+                                        <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.Telephone,"Telephone") }}
+                                            {{ form_widget(userForm.Telephone,{'attr':{"class":"mb-0"}}) }}
+                                        
+                                        </div>
+                                        <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.Age,"Age") }}
+                                            {{ form_widget(userForm.Age,{'attr':{"class":"mb-0"}}) }}
+                                        </div>
+                                        <div class="col-md-6 mb-20">
+                                           {{ form_label(userForm.Password,"Password") }}
+                                           {{ form_widget(userForm.Password,{'attr':{"class":"mb-0"}}) }}
+                                           
+                                        </div>
+                                        <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.ConfirmPassword,"Confirm Password") }}
+                                            {{ form_widget(userForm.ConfirmPassword,{'attr':{"class":"mb-0"}}) }}
+                                            
+                                         </div>
+                                    </div>
+                                    <div> <h4>Password Recovety Questions</h4></div><br>
+                                    <div class="row">
+                                         <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.QuestionSecurite1,"What is the name of the town where you were born?") }}
+                                            {{ form_widget(userForm.QuestionSecurite1,{'attr':{"class":"mb-0"}}) }}
+                                            
+                                         </div>
+                                         <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.QuestionSecurite2,"Where was your best family vacation as a kid?") }}
+                                            {{ form_widget(userForm.QuestionSecurite2,{'attr':{"class":"mb-0"}}) }}
+                                            
+                                         </div>
+                                        <div class="col-md-6 mb-20">
+                                            {{ form_label(userForm.captchaCode,"Captcha") }}
+                                            {{ form_widget(userForm.captchaCode,{'attr':{"class":"mb-0"}}) }}
+                                        
+                                        </div>
+                                       <div class="col-12">
+                                            {{ form_row(userForm.Register,{'attr':{ "label":"Register" ,"class":"register-button mt-0"}}) }}
+                                          
+                                        </div>
+                                        {{ form_end(userForm) }}
+                                    </div>
+                                </div>
+                        
+                        </div>
+                   
+                </div>
+            </div>
+            <!-- Login Content Area End Here -->
+         {% endblock %}

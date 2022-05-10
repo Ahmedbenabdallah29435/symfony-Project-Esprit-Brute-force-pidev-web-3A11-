@@ -1,0 +1,61 @@
+{% extends "baseCart.html.twig" %}
+{% block title %}<title>Techmasters | Register</title> {% endblock %}
+{% block body %}
+                <!-- Begin Mobile Menu Area -->
+                <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+                    <div class="container"> 
+                        <div class="row">
+                            <div class="mobile-menu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mobile Menu Area End Here -->
+            </header>
+            <!-- Header Area End Here -->
+            <!-- Begin Li's Breadcrumb Area -->
+            <div class="breadcrumb-area">
+                <div class="container">
+                    <div class="breadcrumb-content">
+                        <ul>
+                            <li><a href="{{path('display_front')}}">Home</a></li>
+                            <li class="active">Register</li>
+                           </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Breadcrumb Area End Here -->
+            <!-- Begin Login Content Area -->
+                            <div class="page-section mb-60">
+                                <div class="container">             
+                                        <div class="row">
+                                         <form action="{{  path('login') }}" method ="post">
+                                            <div class="login-form">
+                                                <h4 class="login-title"><a href="{{path('userAdd')}}">Or Create account</a></h4>
+                                                <h4 class="login-title">Login</h4>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-12 mb-20">
+                                                        <label>Email Address*</label>
+                                                        <input class="mb-0" type="email" placeholder="Email Address"
+                                                        required name="_username">
+                                                    </div>
+                                                    <div class="col-12 mb-20">
+                                                        <label>Password</label>
+                                                        <input class="mb-0" type="password" placeholder="Password" 
+                                                        required name="_password">
+                                                    </div>
+                                                    
+                                                    <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
+                                                        <a href="{{path('app_forgot_password_request')}}"> Forgotten pasward?</a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="register-button mt-0">Login</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                 </div>
+                            </div>
+              
+            <!-- Login Content Area End Here -->
+         {% endblock %}

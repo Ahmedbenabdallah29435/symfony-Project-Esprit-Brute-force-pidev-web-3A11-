@@ -1,0 +1,284 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block body %}
+<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/@esri/arcgis-rest-request@3.0.0/dist/umd/request.umd.js"></script>
+<script src="https://unpkg.com/@esri/arcgis-rest-geocoding@3.0.0/dist/umd/geocoding.umd.js"></script>
+<script src="https://unpkg.com/@esri/arcgis-rest-auth@3.0.0/dist/umd/auth.umd.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+     
+<!--Checkout Area Strat-->
+   <div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        <div class="row">
+           
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-12">
+              
+                    <div class="checkbox-form">
+                        {{ form_start(formA,{'attr': {'novalidate': 'novalidate'}} ) }}
+
+
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>First Name <span class="required">*</span></label>
+                                 {#   {{ form_widget(formA.nomClient, {attr: { value : uti.nom ,readonly:true }}) }} 
+                                    {{ form_errors(formA.nomClient, {attr: { value : uti.nom ,readonly:true }}) }} #}
+                                    {{ form_widget(formA.nomClient,{'attr':{"value":app.user.Nom }}) }} 
+                                    {{ form_errors(formA.nomClient)}} 
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Last Name <span class="required">*</span></label>
+                                  {#  {{ form_widget(formA.prenomClient, {attr: { value : uti.prenom ,readonly:true }}) }}
+                                    {{ form_errors(formA.prenomClient, {attr: { value : uti.prenom ,readonly:true }}) }} #}
+                                    {{ form_widget(formA.prenomClient,{'attr':{"value":app.user.Prenom }} ) }}
+                                    {{ form_errors(formA.prenomClient) }}
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Adress<span class="required">*</span></label>
+                                    {{ form_widget(formA.adresse,  {'id': 'adresse'} ) }}
+                                    {{ form_errors(formA.adresse,  {'id': 'adresse'} ) }}
+
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Post Code <span class="required">*</span></label>
+                                    {{ form_widget(formA.postcode) }}
+                                    {{ form_errors(formA.postcode) }}
+
+                                    
+                                </div>
+                            </div>
+                             <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Phone  <span class="required">*</span></label>
+                                    {{ form_widget(formA.phone ,{'attr':{"value":app.user.Telephone , readonly:true }}) }}
+                                    {{ form_errors(formA.phone) }}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Montant <span class="required">*</span></label>
+                                    {{ form_widget(formA.montant, {attr: { value : total ,readonly:true }}) }} 
+                                    {{ form_errors(formA.montant, {attr: { value : total ,readonly:true }}) }} 
+
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-12">
+                                <div class="country-select clearfix">
+                                   
+                                    <label>Mode Paiement <span class="required">*</span></label>
+                                    {{ form_widget(formA.modePaiemenet) }}
+                                    {{ form_errors  (formA.modePaiemenet) }}
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(formA.Ajouter,{'attr':{ "label":"Ajouter" ,"class":"register-button mt-0"}}) }}
+                              
+                            </div>
+                            {{form_widget(formA.etatCommande , {'value':0 ,'type':'hidden'})}}
+                            {{ form_widget(formA.longitude,  {'id': 'longitudee','type':'hidden'} ) }}
+                            {{ form_widget(formA.latitude,  {'id': 'latitudee','type':'hidden'} ) }}
+                            <body>
+                              <div id="map"></div>
+                             
+                        
+                          
+                            </body>
+                            {% block stylsheets %}
+                            <style>
+                            #map {
+                              height:60vh ; 
+                              width: 150vh;
+                              border: 2px solid black;
+                              bottom: -25px;
+                              left: 30px;
+                            }
+                            
+                            </style>
+                            {% endblock %}
+
+
+
+                            {{ form_end(formA) }}
+                            
+                            
+                           
+                        </div>  
+                    </div>
+               
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="your-order">
+                    <h3>Your order</h3>
+                    <div class="your-order-table table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="cart-product-total">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for element in elements %}
+                                <tr class="cart_item">
+                                  <td class="cart-product-name"> <strong class="product-quantity">{{ element.produit.nomProduit }} </strong></td>
+                                  <td class="cart-product-total"><span class="amount">{{ element.quantite * element.produit.prixProduit }}DT</span></td>  
+                                </tr>
+                               
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                
+                                <tr class="order-total">
+                                    <th> Total</th>
+                                    <td><strong>{{total}}DT<span class="amount"></span></strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-accordion">
+                            <div id="accordion">
+                              <div class="card">
+                                <div class="card-header" id="#payment-1">
+                                  <h5 class="panel-title">
+                                    <a class="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                      Direct Bank Transfer.
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="card">
+                               
+                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="card">
+                                <div class="card-header" id="#payment-3">
+                                  <h5 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                      STRIPE
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                                  <div class="card-body">
+                                    <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-button-payment">
+                        
+
+                           
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Checkout Area End-->
+
+  <script>
+
+const apiKey = "AAPK8f27da23013b4b43b967a2b4cf4fed55MwFkbld8ACq5Y70fgYUK4aLGkBkSdvXT5zEXvakLLEam6hJfa4BHfnL6LbFTkJxf";
+
+const basemapEnum = "ArcGIS:Navigation";
+const coordinates = document.getElementById('coordinates');
+const latitude = document.getElementById('latitude');
+const test= document.getElementById('test');
+const map = new mapboxgl.Map({
+container: "map",
+style: `https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${basemapEnum}?type=style&token=${apiKey}`,
+cooperativeGestures: true,
+zoom: 6,
+
+center: [9.541625307219647, 35.660282489135156], // starting position ([lng, lat] for Mombasa, Kenya)
+
+});
+
+const marker = new mapboxgl.Marker({
+draggable: true
+})
+.setLngLat([9.871215150968851, 37.26823489806061])
+.addTo(map);
+
+function onDragEnd() {
+const lngLat = marker.getLngLat();
+
+
+const coords = lngLat.toArray();
+
+const authentication = new arcgisRest.ApiKey({
+  key: apiKey
+});
+
+var label ='' ;
+arcgisRest
+  .reverseGeocode(coords, {
+    authentication
+  })
+  .then((result) => {
+
+    const lngLat = [result.location.x, result.location.y];
+
+    const label = `${result.address.LongLabel}`;
+    const longitudee= `${lngLat[0].toLocaleString()}`;
+    const latitudee= `${lngLat[1].toLocaleString()}`;
+
+    $("#longitudee").val(longitudee)
+    $("#latitudee").val(latitudee)
+    $("#adresse").val(label)
+
+  })
+   
+  .catch((error) => {
+    alert("There was a problem using the reverse geocode service. See the console for details.");
+    console.error(error);
+  });
+ 
+
+}
+
+marker.on('dragend', onDragEnd);
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.NavigationControl());
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

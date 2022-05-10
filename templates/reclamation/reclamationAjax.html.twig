@@ -1,0 +1,35 @@
+{% for r in tab %}
+            <tr>
+            
+                <td>{{ r.name }}</td>
+                <td>{{ r.email }}</td>
+                <td>{{ r.subject}}</td>
+                <td>{{ r.message }}</td>
+                <td>{{ r.type }}</td>
+              <td>  {% for des in tab1 %}
+                  {% if des.commande.id == r.id %}
+                  *{{ des.produit.nomProduit  }} <br>
+                  {% endif %}
+                  {% endfor %}
+                </td>
+               {% if r.reponse != null %}
+                <td><a href="{{path('etat_rec', {id:r.reponse.id})}}"
+                        onclick="return confirm('Do You want to see The Response to Your reclamation?')">{{ r.etat }}</a></td>
+                {% set var = "http://127.0.0.1:8000/reclamation/etat/" ~ r.reponse.id  %}
+
+                <td><img src="{{ qr_code_url(var)}}" style="width: 150px; height: 150px"/></td>
+
+                {% else %}
+                {#<td>{{ r.createdAt|date('Y-m-d H:i:s') }}</td> #}
+                <td><a href="#">{{ r.etat }}</a></td>
+                 <td><img src="{{ qr_code_url("http://127.0.0.1:8000/reclamation/error")}}" style="width: 150px; height: 150px"/></td>
+
+                
+                {% endif %} 
+            </tr>
+        
+{% else %}
+    <tr>
+        <td colspan="5">no records found</td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,80 @@
+{% extends "baseCart.html.twig" %}
+
+{% block body %}
+    <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner text-center">
+                        <div class="breadcrumb_iner_item">
+                            <h2>Nos Evenements</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+              <!-- Begin Body Wrapper -->
+        <div class="body-wrapper">
+            <!-- Li's Breadcrumb Area End Here -->
+            <!-- Begin Li's Main Blog Page Area -->
+            <div class="li-main-blog-page pt-60 pb-55">
+                <div class="container">
+                    <div class="row">
+                        <!-- Begin Li's Main Content Area -->
+                        <div class="col-lg-12">
+                            <div class="row li-main-content">
+                            {% for evenement  in tab %}
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="li-blog-single-item pb-25">
+                                        <div class="li-blog-banner">
+                                            <a href="{{path('ev_front_detail',{id : evenement.id })}}"><img class="img-full" src="{{asset('uploads/') ~ evenement.affiche}}"  height="350"  ></a>
+                                        </div>
+                                        <div class="li-blog-content">
+                                            <div class="li-blog-details">
+                                                <h3 class="li-blog-heading pt-25"><a href="{{path('ev_front_detail',{id : evenement.id })}}">{{evenement.nom}}</a></h3>
+                                                <div class="li-blog-meta">
+                                                     <a class="countdown" dateD="{{ evenement.date|date}}"></a>
+                                                    <a class="comment" href="#"><i class="fa fa-comment-o"></i> Commentaires</a>
+                                                    <a class="post-time" href="#"><i class="fa fa-calendar"></i>  {{evenement.date|date('Y-m-d H:i:s')}}</a>
+                                                   
+                                                </div>
+                                                <p>{{evenement.description}}</p>
+                                                <a class="read-more" href="{{path('ev_front_detail',{id : evenement.id })}}">Read More...</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              {% endfor %}
+                                <!-- Begin Li's Pagination Area -->
+                                <div class="col-lg-12">
+                                    <div class="li-paginatoin-area text-center pt-25">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ul class="li-pagination-box">
+                                                    <li><a class="Previous" href="#">Previous</a></li>
+                                                    <li class="active"><a href="#">1</a></li>
+                                                    <li><a href="#">2</a></li>
+                                                    <li><a href="#">3</a></li>
+                                                    <li><a class="Next" href="#">Next</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
+                                                        <a href="{{path('app_forgot_password_request')}}"> Want to check other events?</a>
+                                                    </div>
+                                <!-- Li's Pagination End Here Area -->
+                            </div>
+                        </div>
+                        <!-- Li's Main Content Area End Here -->
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Main Blog Page Area End Here -->
+            
+        </div>
+        <!-- Body Wrapper End Here -->
+
+             {% endblock %}

@@ -1,0 +1,104 @@
+
+{% extends "baseCart.html.twig" %}
+{% block title %}<title>ProTECH|Home</title>{% endblock %}
+
+ {% block body %}  
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<!-- content-wraper start -->
+            <div class="content-wraper">
+                <div class="container">
+                    <div class="row single-product-area">
+                        <div class="col-lg-5 col-md-6">
+                           <!-- Product Details Left -->
+                            <div class="product-details-left">
+                                <div class="product-details-images slider-navigation-1">
+                                    <div class="lg-image">
+                                        <a class="popup-img venobox vbox-item"  data-gall="myGallery">
+                                            <img src="{{asset('uploads/') ~ prod.image }}" alt="product image">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product-details-thumbs slider-thumbs-1">                                        
+                     
+                                    
+                                </div>
+                            </div>
+                            <!--// Product Details Left -->
+                        </div>
+
+                        <div class="col-lg-7 col-md-6">
+                            <div class="product-details-view-content pt-60">
+                                <div class="product-info">
+                                    <h2>{{prod.nomProduit}}</h2>
+
+                                     <div class="container">
+                                        <div class="row">
+
+                                           {{form_start(noteform)}}
+                                         <div>
+                                              {{form_widget(noteform.nom , {'value':prod.nomProduit ,'type':'hidden'})}}
+
+                                           </div>
+
+                                                  {% set somme = 0 %}
+                                                 {% for eve in Notes %}
+                                                       {% set somme = (eve.note / Notes|length)+ somme %}  
+                                                 {% endfor %}
+                                                     <div class="rateyo" id= "rating"
+                                                        data-rateyo-rating={{somme}}
+                                                        data-rateyo-num-stars="5"
+                                                        data-rateyo-score="3">
+                                                        </div>
+                                                        <br>
+                                                  <style>
+                                                  h4{
+                                                     color:grey;
+                                                  
+                                                  }
+                                                  </style>
+                    
+                                                 <h4>Raiting : {{somme|number_format(1, '.')}} /5</h4>
+                                                 
+                                                 {{form_widget(noteform.note , { 'id': 'rating','type':'hidden'} ) }}
+                                                 <br>
+                                                 {{form_end(noteform)}}
+                    
+                                                   <p>{{ Notes|length}} Avis</p>
+                                                 <br>
+                                                  
+                                           </div>
+                                    </div>   
+                                    <div class="price-box pt-20">
+                                        <span class="new-price new-price-2">{{prod.prixProduit}} DT</span>
+                                    </div>
+                                    <div class="product-desc">
+                                        <p>
+                                            <span>{{prod.descProduit}}</span>
+                                        </p>
+                                    </div>
+                                                                             <a class="wishlist-btn" href="#"><i class="fa fa-heart-o"></i>Add to wishlist</a>
+
+
+                                   {# <div class="single-add-to-cart">
+                                    <form action="#" href="{{path('details',{id : bout.id })}}" class="cart-quantity">
+                                     <button class="add-to-cart" type="submit">Consulter Boutique</button>
+                                  </form>
+                                    </div>
+                                  #}
+                                  <div class="single-add-to-cart">
+                                    <div class="cart-quantity">
+                                        <a class="add-to-cart"  href="{{path('details',{id :prod.boutique.id })}}" type="submit">View Shop</a>
+                                      <br>
+                                      <br>
+                                        <a class="add-to-cart" href="{{path("cart_add",{id:prod.id})}}" type="submit">Add Tocart</a>
+                                    </div>
+                                </div>
+                              
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <!-- content-wraper end -->
+ {% endblock %}

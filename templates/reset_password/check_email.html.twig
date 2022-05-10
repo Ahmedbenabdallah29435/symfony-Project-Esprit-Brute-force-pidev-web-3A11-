@@ -1,0 +1,44 @@
+{% extends 'baseFront.html.twig' %}
+{% block body %}
+           <!-- Begin Mobile Menu Area -->
+           <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+            <div class="container"> 
+                <div class="row">
+                    <div class="mobile-menu">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Area End Here -->
+    </header>
+    <!-- Header Area End Here -->
+    <!-- Begin Li's Breadcrumb Area -->
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul>
+                    <li><a href="{{path('home')}}">Home</a></li>
+                    <li class="active">New event</li>
+                   </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Li's Breadcrumb Area End Here -->
+    <!-- Begin Login Content Area -->
+                    <div class="page-section mb-60">
+                        <div class="container">                     
+                                    <div class="login-form">
+                                        <h4 class="login-title">new event</h4>
+                                        <p>
+                                            If an account matching your email exists, then an email was just sent that contains a link that you can use to acces new event.
+                                            This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                                        </p>
+                                        <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+                                            
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+      
+    <!-- Login Content Area End Here -->
+  {% endblock %}
